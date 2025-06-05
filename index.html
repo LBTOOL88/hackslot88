@@ -19,48 +19,41 @@
             --aurora-speed: 5s;
         }
 
-        /* --- Animations --- */
         @keyframes aurora-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes aurora-border-glow { 0% { border-color: hsl(180, 100%, 50%); box-shadow: 0 0 15px hsl(180, 100%, 50%); } 25% { border-color: hsl(240, 100%, 65%); box-shadow: 0 0 20px hsl(240, 100%, 65%); } 50% { border-color: hsl(300, 100%, 60%); box-shadow: 0 0 15px hsl(300, 100%, 60%); } 75% { border-color: hsl(60, 100%, 50%); box-shadow: 0 0 20px hsl(60, 100%, 50%); } 100% { border-color: hsl(180, 100%, 50%); box-shadow: 0 0 15px hsl(180, 100%, 50%); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 30px, 0) scale(0.98); } to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); } }
-        @keyframes fade-in-out { 0%, 100% { opacity: 0; } 20%, 80% { opacity: 1; } }
         @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.03); } }
 
-        /* --- Base Styles --- */
         html, body { margin: 0; padding: 0; font-family: 'Roboto', Arial, sans-serif; background: var(--bg-dark-theme); color: var(--text-light); overflow-x: hidden; }
         .hidden { display: none !important; }
         .orbitron-font { font-family: 'Orbitron', sans-serif; }
 
-        /* --- Video Background --- */
         #video-background { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; opacity: 0.6; }
         #video-background iframe { position: absolute; top: 50%; left: 50%; width: 100vw; height: 100vh; transform: translate(-50%, -50%); object-fit: cover; transition: opacity 0.7s ease-in-out; opacity: 0; pointer-events: none; }
         #video-background iframe.active { opacity: 1; }
 
-        /* --- Cinematic Intro --- */
         #cinematicIntroOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity 1s ease-out; }
         #introTextContainer { text-align: center; }
         #introTextContainer h1 { font-family: 'Orbitron', sans-serif; font-size: 2.5em; text-transform: uppercase; color: #fff; text-shadow: 0 0 15px var(--primary-green); opacity: 0; transition: opacity 0.8s ease-in-out; }
         #introTextContainer h1.visible { opacity: 1; }
         @media (max-width: 600px) { #introTextContainer h1 { font-size: 1.8em; } }
 
-        /* --- Main Containers --- */
         .page-container { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 100vh; padding: 20px; box-sizing: border-box; }
-        .form-container, .main-content { background: var(--container-bg); border: 2px solid; border-radius: var(--container-radius); padding: 30px 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); animation: aurora-border-glow var(--aurora-speed) linear infinite, fadeInUp 0.8s ease-out; text-align: center; }
-        
-        /* --- Login Screen --- */
+        .form-container, .main-content { border: 2px solid; border-radius: var(--container-radius); padding: 30px 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); animation: aurora-border-glow var(--aurora-speed) linear infinite, fadeInUp 0.8s ease-out; text-align: center; }
+        .form-container { background: rgba(13, 17, 23, 0.45); backdrop-filter: none; -webkit-backdrop-filter: none; }
+        .main-content { background: var(--container-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+
         #loginLogo { max-width: 120px; margin-bottom: 25px; border-radius: 50%; border: 3px solid var(--primary-green); }
         .intro-title, header h1 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; background: linear-gradient(90deg, #00ffc8, #ff00c1, #ffb300, #00ffc8); background-size: 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: aurora-flow 8s linear infinite; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
         .intro-title { font-size: 2em; margin-bottom: 30px; }
         header h1 { font-size: 1.8em; margin: 0; }
 
-        /* --- App Screen --- */
         header { width: 100%; background-color: rgba(13, 17, 23, 0.8); padding: 15px; text-align: center; border-bottom: 2px solid; border-image: linear-gradient(90deg, #00ffc8, #ff00c1, #ffb300) 1; backdrop-filter: blur(10px); box-sizing: border-box; }
         .main-content { padding: 20px; width: 100%; max-width: 580px; margin-top: 20px; }
         #aiChoiceContainer, #menuContainer, #scanningContainer, #resultContainer { display: flex; flex-direction: column; gap: 20px; animation: fadeInUp 0.6s ease-out forwards; }
 
-        /* --- Form & Buttons --- */
-        input[type="text"] { padding: 14px 20px; margin: 10px 0; width: 100%; max-width: 300px; border-radius: var(--button-radius); border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-light); font-size: 1em; box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); transition: all 0.3s; box-sizing: border-box; }
-        input[type="text"]:focus { outline: none; border-color: var(--primary-green); box-shadow: 0 0 10px var(--primary-green); }
+        input[type="text"], input[type="number"] { padding: 14px 20px; margin: 10px 0; width: 100%; max-width: 300px; border-radius: var(--button-radius); border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-light); font-size: 1em; box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); transition: all 0.3s; box-sizing: border-box; }
+        input[type="text"]:focus, input[type="number"]:focus { outline: none; border-color: var(--primary-green); box-shadow: 0 0 10px var(--primary-green); }
         .action-button { padding: 14px 30px; background: linear-gradient(45deg, #f093fb, #f5576c); color: white; border: none; font-weight: bold; border-radius: var(--button-radius); margin-top: 25px; cursor: pointer; font-size: 1.1em; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,0,0, 0.2); transition: all 0.3s ease; position: relative; overflow: hidden; }
         .action-button:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 10px 20px rgba(f5, 87, 108, 0.4); }
         .choice-card, .menu-btn, .back-btn { border: 2px solid transparent; border-radius: var(--container-radius); padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease-in-out; background: rgba(22, 27, 34, 0.8); backdrop-filter: blur(5px); }
@@ -69,18 +62,17 @@
         .menu-btn, .back-btn { width: 100%; font-size: 1.1em; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; box-sizing: border-box; padding: 16px; }
         #error, #codeError { color: var(--error-red); margin-top: 20px; font-weight: bold; min-height: 1.2em; }
         
-        /* --- Results & Scanning --- */
         #scanningContainer { text-align: center; }
-        #loadingGif { max-width: 150px; margin: 15px auto; mix-blend-mode: screen; }
-        #resultContainer h2, #scanningContainer h3 { background: linear-gradient(90deg, #00ffc8, #ff00c1, #ffb300, #00ffc8); background-size: 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: aurora-flow 8s linear infinite; }
+        #loadingGif { max-width: 150px; margin: 15px auto; mix-blend-mode: screen; border-radius: 8px; }
+        #resultContainer h2, #scanningContainer h3, #financeAllocatorContainer h3 { background: linear-gradient(90deg, #00ffc8, #ff00c1, #ffb300, #00ffc8); background-size: 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: aurora-flow 8s linear infinite; }
         .result-stats { padding: 15px; margin-top: 15px; }
         .result-stats p strong { color: transparent; background: linear-gradient(90deg, #00ffc8, #ffb300); -webkit-background-clip: text; background-clip: text; }
         #goldenTimeContainer { background: linear-gradient(45deg, #ffc107, #ff9800); color: var(--bg-dark-theme); padding: 15px; border-radius: var(--container-radius); margin-top: 20px; text-align: center; border: 2px solid #ffeb3b; box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); animation: pulse 2s infinite alternate; }
         
-        /* --- Modals --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; z-index: 9000; backdrop-filter: blur(5px); }
         .modal-content { padding: 30px; width: 90%; max-width: 450px; text-align: center; background: var(--container-bg); border: 2px solid; border-radius: var(--container-radius); animation: aurora-border-glow var(--aurora-speed) linear infinite, fadeInUp 0.5s ease-out; box-sizing: border-box; }
         .modal-content h2 { font-family: 'Orbitron', sans-serif; }
+        #securityMessage { text-align: left; line-height: 1.8; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; }
     </style>
 </head>
 <body>
@@ -116,12 +108,8 @@
     </header>
     <div class="main-content">
         <div id="aiChoiceContainer">
-            <div class="choice-card" id="choiceAILongBao">
-                <h3 class="orbitron-font">A.I LONG BẢO</h3> <p>Phiên bản cơ bản</p>
-            </div>
-            <div class="choice-card" id="choiceAILongBao4">
-                <h3 class="orbitron-font">A.I LONG BẢO THẾ HỆ 4</h3> <p>Phiên bản nâng cao (yêu cầu mã)</p>
-            </div>
+            <div class="choice-card" id="choiceAILongBao"> <h3 class="orbitron-font">A.I LONG BẢO</h3> <p>Phiên bản cơ bản</p> </div>
+            <div class="choice-card" id="choiceAILongBao4"> <h3 class="orbitron-font">A.I LONG BẢO THẾ HỆ 4</h3> <p>Phiên bản nâng cao (yêu cầu mã)</p> </div>
         </div>
         <div id="menuContainer" class="hidden">
             <button class="menu-btn orbitron-font" id="startScanBtn">Quét Lỗ Hổng</button>
@@ -145,7 +133,16 @@
                 <h3 class="orbitron-font">🌟 KHUNG GIỜ VÀNG 🌟</h3>
                 <span id="goldenTime">Đang tính toán...</span>
             </div>
-            <button class="back-btn orbitron-font" id="backToMenuBtn">Quay Lại Menu</button>
+            
+            <div id="financeAllocatorContainer" class="hidden" style="margin-top: 25px; border-top: 2px solid var(--border-color); padding-top: 20px;">
+                <h3 class="orbitron-font">PHÂN CHIA TÀI CHÍNH</h3>
+                <p style="font-size: 0.9em; opacity: 0.8;">Nhập tổng vốn để nhận gợi ý cược.</p>
+                <input type="number" id="capitalInput" placeholder="Nhập vốn (ví dụ: 100 = 100.000đ)" style="margin: 15px auto;">
+                <button id="calculateFinanceBtn" class="action-button" style="padding: 10px 25px; font-size: 1em; margin-top: 10px;">Phân Chia Vốn</button>
+                <div id="financeResult" style="margin-top: 20px; text-align: left; padding: 15px; background: rgba(0,0,0,0.25); border-radius: 8px; line-height: 1.8;"></div>
+            </div>
+
+            <button class="back-btn orbitron-font" id="backToMenuBtn" style="margin-top: 25px;">Quay Lại Menu</button>
         </div>
     </div>
 </div>
@@ -163,9 +160,9 @@
     <div class="modal-content">
         <h2>KIỂM TRA BẢO MẬT</h2>
         <div id="securityCheckContent">
-             <p id="securityMessage">Đang kiểm tra hệ thống...</p>
-             </div>
-        <button id="closeSecurityModalBtn" class="action-button hidden" style="padding: 10px 20px; font-size: 0.9em;">Đã Hiểu</button>
+             <p id="securityMessage"></p>
+        </div>
+        <button id="closeSecurityModalBtn" class="action-button hidden" style="padding: 10px 20px; font-size: 0.9em; margin-top: 15px;">Đã Hiểu</button>
     </div>
 </div>
 <div id="capitalWarningModal" class="modal-overlay hidden">
@@ -175,65 +172,46 @@
         <button id="closeWarningModalBtn" class="action-button" style="padding: 10px 20px; font-size: 0.9em;">Đóng</button>
     </div>
 </div>
+<div id="inactivityWarningModal" class="modal-overlay hidden" style="z-index: 11000;">
+    <div class="modal-content" style="border-color: var(--error-red); box-shadow: 0 0 25px var(--error-red);">
+        <h2 style="color: var(--error-red);">⚠️ CẢNH BÁO BẢO MẬT ⚠️</h2>
+        <p style="font-size: 1.2em; color: #f5a623; line-height: 1.6;">SẢNH GAME ĐANG THEO DÕI !<br>HÃY TẮT ĐIỆN THOẠI VÀ KHỞI ĐỘNG LẠI NGAY LẬP TỨC!</p>
+    </div>
+</div>
+
 
 <script>
     const validLoginCodes = ["167904", "582173", "907348", "213560", "638901", "475289", "801452", "026815", "749063", "350728"];
     const gen4Codes = ["LB4-98A1", "LB4-33B7", "LB4-C45D", "LB4-E6F2", "LB4-770A", "LB4-B81C", "LB4-D29E", "LB4-F333", "LB4-84G5", "LB4-H6I9"];
     let chosenAI = null;
-
     const gameData = [ { name: 'BA CON HEO NHỎ', image: 'https://i.ibb.co/Q3dYksdQ/BA-CON-HEO-NH.jpg' }, { name: 'BÃO KỊCH NGON NGỌT', image: 'https://i.ibb.co/h1XkFxcw/B-O-K-CH-NG-NG-T.jpg' }, { name: 'BÃO KIM TIỀN', image: 'https://i.ibb.co/KpXRkb4n/B-O-KIM-TI-N.jpg' }, { name: 'CUỒNG NỘ MÈO', image: 'https://i.ibb.co/jvnT8Qm1/CU-I-N-M.jpg' }, { name: 'THẦN TÀI GIÁ ĐÁO', image: 'https://i.ibb.co/jXvqdpd/default-4.jpg' }, { name: 'JOKER', image: 'https://i.ibb.co/21C53TfM/JOKER.jpg' }, { name: 'NỮ HOÀNG INCA', image: 'https://i.ibb.co/JRgCH2CC/N-HO-NG-INCA.jpg' }, { name: 'ALIBABA', image: 'https://i.ibb.co/6JJzg75v/ALIBABA.jpg' }, { name: 'BÓNG THÁCH ĐẤU 2', image: 'https://i.ibb.co/bjS6ztq7/B-O-TH-CH-2.jpg' }, { name: 'QUYỀN VƯƠNG', image: 'https://i.ibb.co/Y4Pky0NW/QUY-N-V-NG.jpg' }, { name: 'SIN CITY', image: 'https://i.ibb.co/FbLYFC28/SINCITY.jpg' }, { name: 'SUPER ACE', image: 'https://i.ibb.co/0z7rq0R/SUPER-ACE.jpg' }, { name: 'THÀNH PHỐ VÀNG', image: 'https://i.ibb.co/5XpkCZ9Z/TH-NH-PH-V-NG.jpg' }, { name: 'TRÂU HÚC', image: 'https://i.ibb.co/N5Dst5n/TR-U-H-C.jpg' }, { name: 'ĐƯỜNG MẠT CHƯỢC 2', image: 'https://i.ibb.co/9HzhpDSZ/NG-M-T-CH-C-2.jpg' }, { name: 'ĐƯỜNG MẠT CHƯỢT', image: 'https://i.ibb.co/CsvS9Jq7/NG-M-T-CH-T.jpg' }, { name: 'GANESHA VÀNG', image: 'https://i.ibb.co/tPKDFgXJ/GANESHA-V-NG.jpg' }, { name: 'KỲ LÂN MẠ VÀNG', image: 'https://i.ibb.co/S7srXvxc/K-L-N-M-CH-N-C.jpg' }, { name: 'KHO BÁU AZTEC', image: 'https://i.ibb.co/x8g4Yjb3/KHO-B-U-AZTEC.jpg' }, { name: 'MEDUSA 1: LỜI NGUYỀN ATHENA', image: 'https://i.ibb.co/DD4JSsQ1/MEDUSA-1-L-I-NGUY-N.jpg' }, { name: 'MEDUSA', image: 'https://i.ibb.co/cKvJ8hQf/MEDUSA.jpg' }, { name: 'NEKO MAY MẮN', image: 'https://i.ibb.co/RTjCsDvf/NEKO-MAY-M-N.jpg' }, { name: 'NỮ HOÀNG TIỀN THƯỞNG', image: 'https://i.ibb.co/fVxjh4rC/N-HO-NG-TI-N-TH-NG.jpg' }, { name: 'QUỶ TỬ CHIẾN TIỀN THƯỞNG', image: 'https://i.ibb.co/7Nx37ftx/QUY-T-CHI-N-TI-N-TH-NG.jpg' }, { name: 'THỎ MAY MẮN', image: 'https://i.ibb.co/RTXxqQP0/TH-MAY-M-N.jpg' }, { name: 'VUA KHỦNG LONG', image: 'https://i.ibb.co/gbTBKrjg/VUA-C-NG-LONG.jpg' }, { name: 'WILD OTTER', image: 'https://i.ibb.co/srLdPjG/WILD-O-T-C.jpg' }, { name: 'ZOMBIE BREAKER', image: 'https://i.ibb.co/wFnHkL3N/ZOMBIE-BREAKER.jpg' }, { name: 'LỄ HỘI BIA', image: 'https://i.ibb.co/8gwq7PmY/U-B-P-B-N.jpg' }, { name: 'KHU TIỀN MẶT 777', image: 'https://i.ibb.co/SD2Rgf31/KHU-TI-N-M-T-777.jpg' }, { name: 'NOEL BIG BANG', image: 'https://i.ibb.co/Z69fZ2qZ/NOEL-BIG-BANG.jpg' }, { name: 'NGÀY TẬN THẾ', image: 'https://i.ibb.co/Rk2tR28N/NG-Y-T-N-TH.jpg' }, { name: 'NHIỆM VỤ BERMUDA', image: 'https://i.ibb.co/DHG22BF5/NHI-M-V-BERMUDA.jpg' }, { name: 'RACING BULL', image: 'https://i.ibb.co/gbFw5MsH/RACING-BULL.jpg' }, { name: 'RISE OF SAMURAI 4', image: 'https://i.ibb.co/bg6TG5vp/RISE-OF-SAMURAI-4.jpg' }, { name: 'SUGAR RUSH 1000', image: 'https://i.ibb.co/ZjGNbk8/SUGAR-RUSH-1000.jpg' }, { name: 'TIK TAC TAKE', image: 'https://i.ibb.co/fYf5ZfD7/TIK-TAC-TAK.jpg' }, { name: 'VẬN MAY GIZA', image: 'https://i.ibb.co/qYyTgdMS/V-N-MAY-GIZA.jpg' } ];
-
-    const DOM = {
-        cinematicIntro: document.getElementById('cinematicIntroOverlay'),
-        loginScreen: document.getElementById('loginScreen'),
-        appScreen: document.getElementById('appScreen'),
-        aiChoiceContainer: document.getElementById('aiChoiceContainer'),
-        menuContainer: document.getElementById('menuContainer'),
-        scanningContainer: document.getElementById('scanningContainer'),
-        resultContainer: document.getElementById('resultContainer'),
-        videos: { login: document.getElementById('video-login'), aiChoice: document.getElementById('video-ai-choice'), menu: document.getElementById('video-menu'), },
-        modals: { code: document.getElementById('codeEntryModal'), security: document.getElementById('securityCheckModal'), capital: document.getElementById('capitalWarningModal'), }
-    };
-
-    function switchView(show, hide = []) {
-        if (show) show.classList.remove('hidden');
-        hide.forEach(el => el.classList.add('hidden'));
-    }
+    const DOM = { cinematicIntro: document.getElementById('cinematicIntroOverlay'), loginScreen: document.getElementById('loginScreen'), appScreen: document.getElementById('appScreen'), aiChoiceContainer: document.getElementById('aiChoiceContainer'), menuContainer: document.getElementById('menuContainer'), scanningContainer: document.getElementById('scanningContainer'), resultContainer: document.getElementById('resultContainer'), videos: { login: document.getElementById('video-login'), aiChoice: document.getElementById('video-ai-choice'), menu: document.getElementById('video-menu'), }, modals: { code: document.getElementById('codeEntryModal'), security: document.getElementById('securityCheckModal'), capital: document.getElementById('capitalWarningModal'), inactivity: document.getElementById('inactivityWarningModal') } };
     
-    function updateVideoBackground(activeVideo) {
-        Object.values(DOM.videos).forEach(video => video.classList.remove('active'));
-        if (DOM.videos[activeVideo]) DOM.videos[activeVideo].classList.add('active');
-    }
+    let inactivityTimer;
+
+    function switchView(show, hide = []) { if (show) show.classList.remove('hidden'); hide.forEach(el => el.classList.add('hidden')); }
+    function updateVideoBackground(activeVideo) { Object.values(DOM.videos).forEach(video => video.classList.remove('active')); if (DOM.videos[activeVideo]) DOM.videos[activeVideo].classList.add('active'); }
 
     function checkLoginCode() {
-        const usernameInput = document.getElementById("username");
-        const codeInput = document.getElementById("loginCode");
-        const errorEl = document.getElementById("error");
-        const username = usernameInput.value.trim();
-        const code = codeInput.value.trim();
-
+        const usernameInput = document.getElementById("username"), codeInput = document.getElementById("loginCode"), errorEl = document.getElementById("error");
+        const username = usernameInput.value.trim(), code = codeInput.value.trim();
         if (!username) { errorEl.textContent = "Vui lòng nhập Tên tài khoản!"; return; }
         if (!code) { errorEl.textContent = "Vui lòng nhập Mã truy cập!"; return; }
-
-        if (validLoginCodes.includes(code)) {
-            errorEl.textContent = "";
-            switchView(DOM.appScreen, [DOM.loginScreen]);
-            switchView(DOM.aiChoiceContainer, [DOM.menuContainer, DOM.scanningContainer, DOM.resultContainer]);
-            updateVideoBackground('aiChoice');
-        } else {
-            errorEl.textContent = "Mã truy cập không chính xác. Vui lòng thử lại!";
-        }
+        if (validLoginCodes.includes(code)) { errorEl.textContent = ""; switchView(DOM.appScreen, [DOM.loginScreen]); switchView(DOM.aiChoiceContainer, [DOM.menuContainer, DOM.scanningContainer, DOM.resultContainer]); updateVideoBackground('aiChoice');
+        } else { errorEl.textContent = "Mã truy cập không chính xác. Vui lòng thử lại!"; }
     }
 
-    function selectAI(type) {
-        chosenAI = type;
-        switchView(DOM.menuContainer, [DOM.aiChoiceContainer]);
-        updateVideoBackground('menu');
-    }
-
+    function selectAI(type) { chosenAI = type; switchView(DOM.menuContainer, [DOM.aiChoiceContainer]); updateVideoBackground('menu'); }
+    
     function startScan() {
+        const loadingGif = document.getElementById('loadingGif');
+        if (chosenAI === 'gen4') {
+            loadingGif.src = 'https://i.ibb.co/C30H2ZYr/Nft-Hacker-GIF-by-Cyber-Brokers.gif';
+        } else {
+            loadingGif.src = 'https://i.ibb.co/nsw6D7cw/Art-Animation-GIF-by-xponentialdesign.gif';
+        }
         switchView(DOM.scanningContainer, [DOM.menuContainer, DOM.resultContainer]);
-        updateVideoBackground('none'); 
+        updateVideoBackground('none');
         setTimeout(showResults, 3500);
     }
     
@@ -241,114 +219,131 @@
         const modal = DOM.modals.security;
         const messageEl = document.getElementById('securityMessage');
         const closeBtn = document.getElementById('closeSecurityModalBtn');
-
-        messageEl.textContent = "Đang kiểm tra hệ thống...";
+        
+        messageEl.innerHTML = "";
         closeBtn.classList.add('hidden');
         showModal(modal);
 
-        setTimeout(() => {
-            messageEl.innerHTML = "✅ <br>Tài khoản của bạn an toàn. Không phát hiện rủi ro.";
-            closeBtn.classList.remove('hidden');
-        }, 3000);
+        const logMessages = ["ĐANG PHÂN TÍCH TÀI KHOẢN...", "ĐANG KIỂM TRA LỊCH SỬ THẮNG...", "ĐANG KIỂM TRA IP HIỆN TẠI...", "...................", "ĐANG XOÁ IP HIỆN TẠI", "ĐANG THAY THẾ IP MỚI", "ĐANG XOÁ THEO DÕI TỪ SẢNH GAME", "ĐANG KHÔI PHỤC TÀI KHOẢN...", "ĐANG LÀM SẠCH TOÀN BỘ TÀI KHOẢN...", "<strong style='color:var(--primary-green)'>TÀI KHOẢN ĐÃ ĐƯỢC KHÔI PHỤC 100%</strong>", "<strong>HÃY VÔ GAME !</strong>" ];
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < logMessages.length) {
+                messageEl.innerHTML += logMessages[i] + "<br>";
+                i++;
+            } else {
+                clearInterval(interval);
+                closeBtn.classList.remove('hidden');
+            }
+        }, 800);
     }
-
+    
     function showResults() {
         switchView(DOM.resultContainer, [DOM.scanningContainer]);
         const selectedGame = gameData[Math.floor(Math.random() * gameData.length)];
         const winRate = (chosenAI === 'gen4') ? (Math.random() * (98.5 - 85) + 85) : (Math.random() * (92.5 - 75) + 75);
         const spinCount = Math.floor(Math.random() * (250 - 120 + 1)) + 120;
         const scatterRate = (chosenAI === 'gen4') ? (Math.random() * (90 - 65) + 65) : (Math.random() * (75 - 50) + 50);
-
         document.getElementById('gameName').textContent = "KẾT QUẢ: " + selectedGame.name;
         document.getElementById('gameImage').src = selectedGame.image;
-        
         animateCountUp(document.getElementById('winRate'), winRate, 2, '%');
         animateCountUp(document.getElementById('spinCount'), spinCount, 0, ' vòng');
         animateCountUp(document.getElementById('scatterRate'), scatterRate, 2, '%');
         calculateGoldenTime();
+        document.getElementById('financeAllocatorContainer').classList.remove('hidden');
+        document.getElementById('financeResult').innerHTML = "";
+        document.getElementById('capitalInput').value = "";
+    }
+    
+    function calculateAndDisplayFinance() {
+        const capitalInput = document.getElementById('capitalInput');
+        const resultDiv = document.getElementById('financeResult');
+        const rawValue = parseInt(capitalInput.value, 10);
+
+        if (isNaN(rawValue) || rawValue <= 0) {
+            resultDiv.innerHTML = `<p style="color: var(--error-red);">Vui lòng nhập một số vốn hợp lệ.</p>`;
+            return;
+        }
+
+        const totalCapital = rawValue * 1000;
+        const percentages = [0.01, 0.02, 0.03];
+        const randomPercentage = percentages[Math.floor(Math.random() * percentages.length)];
+        const suggestedBet = totalCapital * randomPercentage;
+
+        resultDiv.innerHTML = `
+            <p><strong>Tổng vốn:</strong> ${totalCapital.toLocaleString('vi-VN')} đ</p>
+            <p><strong>Mức cược đề xuất (${randomPercentage * 100}%):</strong> <span style="color: var(--primary-green); font-weight: bold;">${suggestedBet.toLocaleString('vi-VN')} đ/vòng</span></p>
+        `;
     }
     
     function calculateGoldenTime() {
-        const now = new Date();
-        const startOffset = Math.floor(Math.random() * 21) + 5;
-        const endTime = startOffset + (Math.floor(Math.random() * 6) + 10);
-        const startTime = new Date(now.getTime() + startOffset * 60000);
-        const finalEndTime = new Date(now.getTime() + endTime * 60000);
+        const now = new Date(), startOffset = Math.floor(Math.random() * 21) + 5, endTime = startOffset + (Math.floor(Math.random() * 6) + 10);
+        const startTime = new Date(now.getTime() + startOffset * 60000), finalEndTime = new Date(now.getTime() + endTime * 60000);
         const formatTime = (date) => date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
         document.getElementById('goldenTime').textContent = `${formatTime(startTime)} - ${formatTime(finalEndTime)}`;
     }
 
     function animateCountUp(el, end, decimals, suffix) {
-        let start = 0;
-        const duration = 1500, frameRate = 1000 / 60, totalFrames = Math.round(duration / frameRate);
-        const increment = end / totalFrames;
-        let currentFrame = 0;
-        const counter = setInterval(() => {
-            start += increment;
-            currentFrame++;
-            if (start > end) start = end;
-            el.textContent = `${start.toFixed(decimals)}${suffix}`;
-            if (currentFrame === totalFrames) clearInterval(counter);
-        }, frameRate);
+        let start = 0, duration = 1500, frameRate = 1000 / 60, totalFrames = Math.round(duration / frameRate), increment = end / totalFrames, currentFrame = 0;
+        const counter = setInterval(() => { start += increment; currentFrame++; if (start > end) start = end; el.textContent = `${start.toFixed(decimals)}${suffix}`; if (currentFrame === totalFrames) clearInterval(counter); }, frameRate);
     }
     
     function goBackToChoices() { switchView(DOM.aiChoiceContainer, [DOM.menuContainer]); updateVideoBackground('aiChoice'); }
     function goBackToMenu() { switchView(DOM.menuContainer, [DOM.resultContainer]); updateVideoBackground('menu'); }
-
     function showModal(modal) { modal.classList.remove('hidden'); }
     function hideModal(modal) { modal.classList.add('hidden'); }
-    
     function preloadImages() { gameData.forEach(game => { const img = new Image(); img.src = game.image; }); }
     
     function startCinematicIntro() {
-        const line1 = document.getElementById('introLine1');
-        const line2 = document.getElementById('introLine2');
-        const line3 = document.getElementById('introLine3');
-        const overlay = DOM.cinematicIntro;
-
+        const line1 = document.getElementById('introLine1'), line2 = document.getElementById('introLine2'), line3 = document.getElementById('introLine3'), overlay = DOM.cinematicIntro;
         setTimeout(() => { line1.classList.add('visible'); }, 500);
         setTimeout(() => { line1.classList.remove('visible'); line2.classList.add('visible'); }, 2500);
         setTimeout(() => { line2.classList.remove('visible'); line3.classList.add('visible'); }, 4500);
-        setTimeout(() => {
-            overlay.style.opacity = '0';
-            switchView(DOM.loginScreen, []);
-            updateVideoBackground('login');
-            setTimeout(() => overlay.classList.add('hidden'), 1000);
-        }, 6500);
+        setTimeout(() => { overlay.style.opacity = '0'; switchView(DOM.loginScreen, []); updateVideoBackground('login'); setTimeout(() => overlay.classList.add('hidden'), 1000); }, 6500);
+    }
+
+    function showInactivityWarning() { showModal(DOM.modals.inactivity); }
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(showInactivityWarning, 15 * 60 * 1000);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
         preloadImages();
         startCinematicIntro();
 
+        document.getElementById('calculateFinanceBtn').addEventListener('click', calculateAndDisplayFinance);
+        
+        // Sửa lỗi logic hiển thị modal nhập code
         document.getElementById('choiceAILongBao').addEventListener('click', () => selectAI('base'));
         document.getElementById('choiceAILongBao4').addEventListener('click', () => showModal(DOM.modals.code));
-        
+
         document.getElementById('submitGen4CodeBtn').addEventListener('click', () => {
-            const codeInput = document.getElementById('gen4CodeInput');
-            const codeError = document.getElementById('codeError');
+            const codeInput = document.getElementById('gen4CodeInput'), codeError = document.getElementById('codeError');
             if (gen4Codes.includes(codeInput.value.trim().toUpperCase())) {
                 hideModal(DOM.modals.code);
                 selectAI('gen4');
                 codeInput.value = '';
                 codeError.textContent = '';
-            } else { codeError.textContent = 'Mã không hợp lệ!'; }
+            } else {
+                codeError.textContent = 'Mã không hợp lệ!';
+            }
         });
-        document.getElementById('closeCodeModalBtn').addEventListener('click', () => hideModal(DOM.modals.code));
 
+        document.getElementById('closeCodeModalBtn').addEventListener('click', () => hideModal(DOM.modals.code));
         document.getElementById('startScanBtn').addEventListener('click', startScan);
         document.getElementById('securityCheckBtn').addEventListener('click', runSecurityCheck);
         document.getElementById('capitalPreserveBtn').addEventListener('click', () => showModal(DOM.modals.capital));
-        
         document.getElementById('backToChoiceBtn').addEventListener('click', goBackToChoices);
         document.getElementById('backToMenuBtn').addEventListener('click', goBackToMenu);
-        
         document.getElementById('closeSecurityModalBtn').addEventListener('click', () => hideModal(DOM.modals.security));
         document.getElementById('closeWarningModalBtn').addEventListener('click', () => hideModal(DOM.modals.capital));
-        
-        Object.values(DOM.modals).forEach(modal => {
-            modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(modal); });
-        });
+        Object.values(DOM.modals).forEach(modal => { if(modal.id !== 'inactivityWarningModal') { modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(modal); }); } });
+
+        window.onload = resetInactivityTimer;
+        document.onmousemove = resetInactivityTimer;
+        document.onmousedown = resetInactivityTimer;
+        document.ontouchstart = resetInactivityTimer;
+        document.onkeypress = resetInactivityTimer;
     });
 </script>
 </body>
