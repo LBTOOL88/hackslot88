@@ -73,6 +73,12 @@
         .modal-content { padding: 30px; width: 90%; max-width: 450px; text-align: center; background: var(--container-bg); border: 2px solid; border-radius: var(--container-radius); animation: aurora-border-glow var(--aurora-speed) linear infinite, fadeInUp 0.5s ease-out; box-sizing: border-box; }
         .modal-content h2 { font-family: 'Orbitron', sans-serif; }
         #securityMessage { text-align: left; line-height: 1.8; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; }
+
+        #registration-banner { margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 20px; font-size: 0.9em; opacity: 0.9; }
+        #registration-banner p { margin: 8px 0; }
+        #registration-banner a { color: var(--primary-green); text-decoration: none; font-weight: bold; }
+        #registration-banner a:hover { text-decoration: underline; }
+
     </style>
 </head>
 <body>
@@ -99,6 +105,12 @@
         <input type="text" id="loginCode" placeholder="Mã truy cập" />
         <button class="action-button" onclick="checkLoginCode()">Xác nhận</button>
         <p id="error"></p>
+        
+        <div id="registration-banner">
+            <p>ĐĂNG KÍ TÀI KHOẢN TẠI <a href="http://www.f168.codes" target="_blank" rel="noopener noreferrer">WWW.F168.CODES</a></p>
+            <p>LIÊN HỆ LONG BẢO: <span style="color: var(--primary-green); font-weight: bold;">@LONGBAOF168</span></p>
+        </div>
+
     </div>
 </div>
 
@@ -312,8 +324,6 @@
         startCinematicIntro();
 
         document.getElementById('calculateFinanceBtn').addEventListener('click', calculateAndDisplayFinance);
-        
-        // Sửa lỗi logic hiển thị modal nhập code
         document.getElementById('choiceAILongBao').addEventListener('click', () => selectAI('base'));
         document.getElementById('choiceAILongBao4').addEventListener('click', () => showModal(DOM.modals.code));
 
