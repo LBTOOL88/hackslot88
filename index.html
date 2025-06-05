@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-green: #00ff7f;
+            --primary-color: #00ff7f; /* Green */
             --text-light: #f0f0f0;
             --bg-dark-theme: #0d1117;
             --container-bg: rgba(13, 17, 23, 0.75);
@@ -19,9 +19,8 @@
             --aurora-speed: 5s;
         }
         @keyframes aurora-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes aurora-border-glow { 0% { border-color: hsl(180, 100%, 50%); box-shadow: 0 0 15px hsl(180, 100%, 50%); } 25% { border-color: hsl(240, 100%, 65%); box-shadow: 0 0 20px hsl(240, 100%, 65%); } 50% { border-color: hsl(300, 100%, 60%); box-shadow: 0 0 15px hsl(300, 100%, 60%); } 75% { border-color: hsl(60, 100%, 50%); box-shadow: 0 0 20px hsl(60, 100%, 50%); } 100% { border-color: hsl(180, 100%, 50%); box-shadow: 0 0 15px hsl(180, 100%, 50%); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 30px, 0) scale(0.98); } to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); } }
         @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.03); } }
+        @keyframes online-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
         html, body { margin: 0; padding: 0; font-family: 'Roboto', Arial, sans-serif; background: var(--bg-dark-theme); color: var(--text-light); overflow-x: hidden; }
         .hidden { display: none !important; }
@@ -33,30 +32,30 @@
 
         #cinematicIntroOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity 1s ease-out; cursor: pointer; }
         #introTextContainer { text-align: center; }
-        #introTextContainer h1 { font-family: 'Orbitron', sans-serif; font-size: 2.5em; text-transform: uppercase; color: #fff; text-shadow: 0 0 15px var(--primary-green); opacity: 0; transition: opacity 0.8s ease-in-out; }
+        #introTextContainer h1 { font-family: 'Orbitron', sans-serif; font-size: 2.5em; text-transform: uppercase; color: #fff; text-shadow: 0 0 15px var(--primary-color); opacity: 0; transition: opacity 0.8s ease-in-out; }
         #introTextContainer h1.visible { opacity: 1; }
         @media (max-width: 600px) { #introTextContainer h1 { font-size: 1.8em; } }
 
         .page-container { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 100vh; padding: 20px; box-sizing: border-box; }
-        .form-container, .main-content { border: 2px solid; border-radius: var(--container-radius); padding: 30px 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); animation: aurora-border-glow var(--aurora-speed) linear infinite, fadeInUp 0.8s ease-out; text-align: center; }
+        .form-container, .main-content { border: 2px solid var(--border-color); border-radius: var(--container-radius); padding: 30px 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); animation: fadeInUp 0.8s ease-out; text-align: center; }
         .form-container { background: rgba(13, 17, 23, 0.45); backdrop-filter: none; -webkit-backdrop-filter: none; }
-        .main-content { background: var(--container-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); max-width: 620px; }
+        .main-content { position: relative; background: var(--container-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); max-width: 620px; }
 
-        #loginLogo { max-width: 120px; margin-bottom: 25px; border-radius: 50%; border: 3px solid var(--primary-green); }
-        .intro-title, header h1, #welcomeMessage { font-family: 'Orbitron', sans-serif; text-transform: uppercase; background: linear-gradient(90deg, #00ffc8, #ff00c1, #ffb300, #00ffc8); background-size: 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: aurora-flow 8s linear infinite; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        #loginLogo { max-width: 120px; margin-bottom: 25px; border-radius: 50%; border: 3px solid var(--primary-color); }
+        .intro-title, header h1, #welcomeMessage { font-family: 'Orbitron', sans-serif; text-transform: uppercase; background: linear-gradient(90deg, var(--primary-color), #ff00c1, #ffb300, var(--primary-color)); background-size: 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: aurora-flow 8s linear infinite; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
         .intro-title { font-size: 2em; margin-bottom: 30px; }
         header h1 { font-size: 1.8em; margin: 0; }
         #welcomeMessage { font-size: 1.1em; margin-bottom: 20px; }
 
-        header { width: 100%; background-color: rgba(13, 17, 23, 0.8); padding: 15px; text-align: center; border-bottom: 2px solid; border-image: linear-gradient(90deg, #00ffc8, #ff00c1, #ffb300) 1; backdrop-filter: blur(10px); box-sizing: border-box; }
+        header { width: 100%; background-color: rgba(13, 17, 23, 0.8); padding: 15px; text-align: center; border-bottom: 2px solid var(--border-color); backdrop-filter: blur(10px); box-sizing: border-box; }
         #aiChoiceContainer, #menuContainer, #scanningContainer, #resultContainer, #gameSelectionContainer { display: flex; flex-direction: column; gap: 20px; animation: fadeInUp 0.6s ease-out forwards; }
 
         input[type="text"], input[type="number"] { padding: 14px 20px; margin: 10px 0; width: 100%; max-width: 300px; border-radius: var(--button-radius); border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-light); font-size: 1em; box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); transition: all 0.3s; box-sizing: border-box; }
-        input[type="text"]:focus, input[type="number"]:focus { outline: none; border-color: var(--primary-green); box-shadow: 0 0 10px var(--primary-green); }
+        input[type="text"]:focus, input[type="number"]:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 10px var(--primary-color); }
         .action-button { padding: 14px 30px; background: linear-gradient(45deg, #f093fb, #f5576c); color: white; border: none; font-weight: bold; border-radius: var(--button-radius); margin-top: 25px; cursor: pointer; font-size: 1.1em; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,0,0, 0.2); transition: all 0.3s ease; position: relative; overflow: hidden; }
         .action-button:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 10px 20px rgba(f5, 87, 108, 0.4); }
         .choice-card, .menu-btn, .back-btn { border: 2px solid transparent; border-radius: var(--container-radius); padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease-in-out; background: rgba(22, 27, 34, 0.8); backdrop-filter: blur(5px); }
-        .choice-card:hover, .menu-btn:hover, .back-btn:hover { transform: translateY(-5px); border-color: var(--primary-green); background: rgba(35, 42, 53, 0.9); }
+        .choice-card:hover, .menu-btn:hover, .back-btn:hover { transform: translateY(-5px); border-color: var(--primary-color); background: rgba(35, 42, 53, 0.9); }
         .choice-card.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
         .choice-card h3 { margin-top: 0; font-size: 1.5em; }
         .menu-btn, .back-btn { width: 100%; font-size: 1.1em; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; box-sizing: border-box; padding: 16px; }
@@ -64,28 +63,39 @@
         
         #scanningContainer { text-align: center; }
         #loadingGif { max-width: 150px; margin: 15px auto; mix-blend-mode: screen; border-radius: 8px; }
-        #resultContainer h2, #scanningContainer h3, #financeAllocatorContainer h3, #gameSelectionContainer h3 { background: linear-gradient(90deg, #00ffc8, #ff00c1, #ffb300, #00ffc8); background-size: 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: aurora-flow 8s linear infinite; }
+        #resultContainer h2, #scanningContainer h3, #financeAllocatorContainer h3, #gameSelectionContainer h3 { background: linear-gradient(90deg, var(--primary-color), #ff00c1, #ffb300, var(--primary-color)); background-size: 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: aurora-flow 8s linear infinite; }
         .result-stats { padding: 15px; margin-top: 15px; }
-        .result-stats p strong { color: transparent; background: linear-gradient(90deg, #00ffc8, #ffb300); -webkit-background-clip: text; background-clip: text; }
+        .result-stats p strong { color: transparent; background: linear-gradient(90deg, var(--primary-color), #ffb300); -webkit-background-clip: text; background-clip: text; }
         #goldenTimeContainer { background: linear-gradient(45deg, #ffc107, #ff9800); color: var(--bg-dark-theme); padding: 15px; border-radius: var(--container-radius); margin-top: 20px; text-align: center; border: 2px solid #ffeb3b; box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); animation: pulse 2s infinite alternate; }
-        
+        #scanReasoning { font-style: italic; color: #f5a623; margin-top: 20px; font-size: 1.1em; }
+
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; z-index: 9000; backdrop-filter: blur(5px); }
-        .modal-content { padding: 30px; width: 90%; max-width: 500px; text-align: center; background: var(--container-bg); border: 2px solid; border-radius: var(--container-radius); animation: aurora-border-glow var(--aurora-speed) linear infinite, fadeInUp 0.5s ease-out; box-sizing: border-box; }
+        .modal-content { padding: 30px; width: 90%; max-width: 500px; text-align: center; background: var(--container-bg); border: 2px solid var(--border-color); border-radius: var(--container-radius); animation: fadeInUp 0.5s ease-out; box-sizing: border-box; }
         .modal-content h2 { font-family: 'Orbitron', sans-serif; }
         #securityMessage { text-align: left; line-height: 1.8; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; height: 250px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; }
 
         #registration-banner { margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 20px; font-size: 0.9em; opacity: 0.9; }
         #registration-banner p { margin: 8px 0; }
-        #registration-banner a { color: var(--primary-green); text-decoration: none; font-weight: bold; }
+        #registration-banner a { color: var(--primary-color); text-decoration: none; font-weight: bold; }
         #registration-banner a:hover { text-decoration: underline; }
         
         #game-list { max-height: 40vh; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
         .game-btn { background: rgba(22, 27, 34, 0.8); border: 1px solid var(--border-color); color: var(--text-light); padding: 15px 10px; border-radius: var(--button-radius); cursor: pointer; transition: all 0.3s ease; text-align: center; font-size: 0.9em; }
-        .game-btn:hover { background: var(--primary-green); color: var(--bg-dark-theme); font-weight: bold; }
+        .game-btn:hover { background: var(--primary-color); color: var(--bg-dark-theme); font-weight: bold; }
         
         #historyContent { max-height: 50vh; overflow-y: auto; text-align: left; }
-        .history-item { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid var(--primary-green); }
+        .history-item { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid var(--primary-color); }
         .history-item p { margin: 5px 0; }
+
+        #settingsBtn { position: absolute; top: 15px; right: 15px; font-size: 1.8em; cursor: pointer; transition: transform 0.3s ease; }
+        #settingsBtn:hover { transform: rotate(90deg); }
+        .settings-section { margin: 20px 0; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .color-swatches { display: flex; justify-content: center; gap: 15px; }
+        .swatch { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid var(--text-light); }
+        .swatch.active { box-shadow: 0 0 10px 2px #fff; }
+
+        #dynamicDashboard { border: 1px solid var(--border-color); padding: 10px; margin-bottom: 20px; border-radius: var(--button-radius); display: flex; justify-content: space-around; font-size: 0.8em; text-transform: uppercase; }
+        #systemStatus::before { content: '●'; margin-right: 5px; color: var(--primary-color); animation: online-blink 2s infinite; }
     </style>
 </head>
 <body>
@@ -118,7 +128,7 @@
         <p id="error"></p>
         <div id="registration-banner">
             <p>ĐĂNG KÍ TÀI KHOẢN TẠI <a href="http://www.f168.codes" target="_blank" rel="noopener noreferrer">WWW.F168.CODES</a></p>
-            <p>LIÊN HỆ LONG BẢO: <span style="color: var(--primary-green); font-weight: bold;">@LONGBAOF168</span></p>
+            <p>LIÊN HỆ LONG BẢO: <span style="color: var(--primary-color); font-weight: bold;">@LONGBAOF168</span></p>
         </div>
     </div>
 </div>
@@ -128,6 +138,7 @@
         <h1 class="orbitron-font">A.I LONG BẢO 88</h1>
     </header>
     <div class="main-content">
+        <div id="settingsBtn">⚙️</div>
         <div id="aiChoiceContainer">
             <p id="welcomeMessage"></p>
             <div class="choice-card" id="choiceAILongBao"> <h3 class="orbitron-font">A.I LONG BẢO</h3> <p>Phiên bản cơ bản</p> </div>
@@ -135,6 +146,12 @@
             <div class="choice-card disabled"> <h3 class="orbitron-font">A.I THẾ HỆ 5</h3> <p>(SẮP RA MẮT)</p> </div>
         </div>
         <div id="menuContainer" class="hidden">
+            <div id="dynamicDashboard">
+                <span>Trạng thái hệ thống: <span id="systemStatus"></span></span>
+                <span>Ping: <span id="networkPing"></span></span>
+                <span>A.I Hoạt động: <span id="activeAI"></span></span>
+            </div>
+            <button class="menu-btn orbitron-font" id="jarHuntBtn">Chế Độ Săn Hũ</button>
             <button class="menu-btn orbitron-font" id="autoScanBtn">Tự Động Quét</button>
             <button class="menu-btn orbitron-font" id="startAnalysisBtn">Phân Tích Game</button>
             <button class="menu-btn orbitron-font" id="historyBtn">Lịch sử quét</button>
@@ -148,12 +165,13 @@
             <button class="back-btn orbitron-font" id="backToMenuFromGameSelectBtn" style="margin-top: 20px;">Quay Lại Menu</button>
         </div>
         <div id="scanningContainer" class="hidden">
-            <h3 class="orbitron-font">ĐANG PHÂN TÍCH LỖ HỔNG...</h3>
+            <h3 class="orbitron-font" id="scanTitle">ĐANG PHÂN TÍCH LỖ HỔNG...</h3>
             <img src="" alt="Scanning..." id="loadingGif">
         </div>
         <div id="resultContainer" class="hidden">
             <h2 class="orbitron-font" id="gameName"></h2>
             <img id="gameImage" src="" alt="Game Image" style="width: 100%; max-width: 200px; margin: 15px auto; display: block; border-radius: 8px;">
+            <div id="scanReasoning"></div>
             <div class="result-stats">
                 <p><strong>TỈ LỆ THẮNG:</strong> <span id="winRate"></span></p>
                 <p><strong>SỐ VÒNG XOAY:</strong> <span id="spinCount"></span></p>
@@ -164,10 +182,10 @@
                 <span id="goldenTime">Đang tính toán...</span>
             </div>
             <div id="financeAllocatorContainer" class="hidden" style="margin-top: 25px; border-top: 2px solid var(--border-color); padding-top: 20px;">
-                <h3 class="orbitron-font">PHÂN CHIA TÀI CHÍNH</h3>
-                <p style="font-size: 0.9em; opacity: 0.8;">Nhập tổng vốn để nhận gợi ý cược.</p>
-                <input type="number" id="capitalInput" placeholder="Nhập vốn (ví dụ: 100 = 100.000đ)" style="margin: 15px auto;">
-                <button id="calculateFinanceBtn" class="action-button" style="padding: 10px 25px; font-size: 1em; margin-top: 10px;">Phân Chia Vốn</button>
+                <h3 class="orbitron-font">TRỢ LÝ TÀI CHÍNH</h3>
+                <p style="font-size: 0.9em; opacity: 0.8;">Nhập tổng vốn để nhận kế hoạch chi tiết.</p>
+                <input type="number" id="capitalInput" placeholder="Nhập vốn (ví dụ: 1000 = 1.000.000đ)" style="margin: 15px auto;">
+                <button id="calculateFinanceBtn" class="action-button" style="padding: 10px 25px; font-size: 1em; margin-top: 10px;">Lên Kế Hoạch</button>
                 <div id="financeResult" style="margin-top: 20px; text-align: left; padding: 15px; background: rgba(0,0,0,0.25); border-radius: 8px; line-height: 1.8;"></div>
             </div>
             <button class="back-btn orbitron-font" id="backToMenuBtn" style="margin-top: 25px;">Quay Lại Menu</button>
@@ -175,6 +193,24 @@
     </div>
 </div>
 
+<div id="settingsModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <h2>CÀI ĐẶT</h2>
+        <div class="settings-section">
+            <p>Âm thanh</p>
+            <input type="checkbox" id="soundToggle" checked>
+        </div>
+        <div class="settings-section">
+            <p>Màu chủ đạo</p>
+            <div class="color-swatches">
+                <div class="swatch active" style="background-color: #00ff7f;" data-color="#00ff7f"></div>
+                <div class="swatch" style="background-color: #00bfff;" data-color="#00bfff"></div>
+                <div class="swatch" style="background-color: #ff4757;" data-color="#ff4757"></div>
+            </div>
+        </div>
+        <button id="closeSettingsModalBtn" class="action-button">Đóng</button>
+    </div>
+</div>
 <div id="codeEntryModal" class="modal-overlay hidden">
     <div class="modal-content">
         <h2>NHẬP MÃ KÍCH HOẠT</h2>
@@ -220,19 +256,21 @@
     let chosenAI = null;
     let loggedInUsername = '';
     let scanHistory = [];
+    let isSoundEnabled = true;
+    let dashboardInterval;
     const gameData = [ { name: 'BA CON HEO NHỎ', image: 'https://i.ibb.co/Q3dYksdQ/BA-CON-HEO-NH.jpg' }, { name: 'BÃO KỊCH NGON NGỌT', image: 'https://i.ibb.co/h1XkFxcw/B-O-K-CH-NG-NG-T.jpg' }, { name: 'BÃO KIM TIỀN', image: 'https://i.ibb.co/KpXRkb4n/B-O-KIM-TI-N.jpg' }, { name: 'CUỒNG NỘ MÈO', image: 'https://i.ibb.co/jvnT8Qm1/CU-I-N-M.jpg' }, { name: 'THẦN TÀI GIÁ ĐÁO', image: 'https://i.ibb.co/jXvqdpd/default-4.jpg' }, { name: 'JOKER', image: 'https://i.ibb.co/21C53TfM/JOKER.jpg' }, { name: 'NỮ HOÀNG INCA', image: 'https://i.ibb.co/JRgCH2CC/N-HO-NG-INCA.jpg' }, { name: 'ALIBABA', image: 'https://i.ibb.co/6JJzg75v/ALIBABA.jpg' }, { name: 'BÓNG THÁCH ĐẤU 2', image: 'https://i.ibb.co/bjS6ztq7/B-O-TH-CH-2.jpg' }, { name: 'QUYỀN VƯƠNG', image: 'https://i.ibb.co/Y4Pky0NW/QUY-N-V-NG.jpg' }, { name: 'SIN CITY', image: 'https://i.ibb.co/FbLYFC28/SINCITY.jpg' }, { name: 'SUPER ACE', image: 'https://i.ibb.co/0z7rq0R/SUPER-ACE.jpg' }, { name: 'THÀNH PHỐ VÀNG', image: 'https://i.ibb.co/5XpkCZ9Z/TH-NH-PH-V-NG.jpg' }, { name: 'TRÂU HÚC', image: 'https://i.ibb.co/N5Dst5n/TR-U-H-C.jpg' }, { name: 'ĐƯỜNG MẠT CHƯỢC 2', image: 'https://i.ibb.co/9HzhpDSZ/NG-M-T-CH-C-2.jpg' }, { name: 'ĐƯỜNG MẠT CHƯỢT', image: 'https://i.ibb.co/CsvS9Jq7/NG-M-T-CH-T.jpg' }, { name: 'GANESHA VÀNG', image: 'https://i.ibb.co/tPKDFgXJ/GANESHA-V-NG.jpg' }, { name: 'KỲ LÂN MẠ VÀNG', image: 'https://i.ibb.co/S7srXvxc/K-L-N-M-CH-N-C.jpg' }, { name: 'KHO BÁU AZTEC', image: 'https://i.ibb.co/x8g4Yjb3/KHO-B-U-AZTEC.jpg' }, { name: 'MEDUSA 1: LỜI NGUYỀN ATHENA', image: 'https://i.ibb.co/DD4JSsQ1/MEDUSA-1-L-I-NGUY-N.jpg' }, { name: 'MEDUSA', image: 'https://i.ibb.co/cKvJ8hQf/MEDUSA.jpg' }, { name: 'NEKO MAY MẮN', image: 'https://i.ibb.co/RTjCsDvf/NEKO-MAY-M-N.jpg' }, { name: 'NỮ HOÀNG TIỀN THƯỞNG', image: 'https://i.ibb.co/fVxjh4rC/N-HO-NG-TI-N-TH-NG.jpg' }, { name: 'QUỶ TỬ CHIẾN TIỀN THƯỞNG', image: 'https://i.ibb.co/7Nx37ftx/QUY-T-CHI-N-TI-N-TH-NG.jpg' }, { name: 'THỎ MAY MẮN', image: 'https://i.ibb.co/RTXxqQP0/TH-MAY-M-N.jpg' }, { name: 'VUA KHỦNG LONG', image: 'https://i.ibb.co/gbTBKrjg/VUA-C-NG-LONG.jpg' }, { name: 'WILD OTTER', image: 'https://i.ibb.co/srLdPjG/WILD-O-T-C.jpg' }, { name: 'ZOMBIE BREAKER', image: 'https://i.ibb.co/wFnHkL3N/ZOMBIE-BREAKER.jpg' }, { name: 'LỄ HỘI BIA', image: 'https://i.ibb.co/8gwq7PmY/U-B-P-B-N.jpg' }, { name: 'KHU TIỀN MẶT 777', image: 'https://i.ibb.co/SD2Rgf31/KHU-TI-N-M-T-777.jpg' }, { name: 'NOEL BIG BANG', image: 'https://i.ibb.co/Z69fZ2qZ/NOEL-BIG-BANG.jpg' }, { name: 'NGÀY TẬN THẾ', image: 'https://i.ibb.co/Rk2tR28N/NG-Y-T-N-TH.jpg' }, { name: 'NHIỆM VỤ BERMUDA', image: 'https://i.ibb.co/DHG22BF5/NHI-M-V-BERMUDA.jpg' }, { name: 'RACING BULL', image: 'https://i.ibb.co/gbFw5MsH/RACING-BULL.jpg' }, { name: 'RISE OF SAMURAI 4', image: 'https://i.ibb.co/bg6TG5vp/RISE-OF-SAMURAI-4.jpg' }, { name: 'SUGAR RUSH 1000', image: 'https://i.ibb.co/ZjGNbk8/SUGAR-RUSH-1000.jpg' }, { name: 'TIK TAC TAKE', image: 'https://i.ibb.co/fYf5ZfD7/TIK-TAC-TAK.jpg' }, { name: 'VẬN MAY GIZA', image: 'https://i.ibb.co/qYyTgdMS/V-N-MAY-GIZA.jpg' } ];
     
     const DOM = {
         cinematicIntro: document.getElementById('cinematicIntroOverlay'), loginScreen: document.getElementById('loginScreen'), appScreen: document.getElementById('appScreen'), aiChoiceContainer: document.getElementById('aiChoiceContainer'), menuContainer: document.getElementById('menuContainer'), scanningContainer: document.getElementById('scanningContainer'), resultContainer: document.getElementById('resultContainer'), gameSelectionContainer: document.getElementById('gameSelectionContainer'),
         videos: { login: document.getElementById('video-login'), aiChoice: document.getElementById('video-ai-choice'), menu: document.getElementById('video-menu') },
-        modals: { code: document.getElementById('codeEntryModal'), security: document.getElementById('securityCheckModal'), capital: document.getElementById('capitalWarningModal'), inactivity: document.getElementById('inactivityWarningModal'), history: document.getElementById('historyModal') },
+        modals: { code: document.getElementById('codeEntryModal'), security: document.getElementById('securityCheckModal'), capital: document.getElementById('capitalWarningModal'), inactivity: document.getElementById('inactivityWarningModal'), history: document.getElementById('historyModal'), settings: document.getElementById('settingsModal') },
         sounds: { click: document.getElementById('clickSound'), scan: document.getElementById('scanSound'), success: document.getElementById('successSound') }
     };
     
     let inactivityTimer, introHasEnded = false;
 
     // --- CÁC HÀM TIỆN ÍCH ---
-    function playSound(soundName) { try { if (DOM.sounds[soundName]) { DOM.sounds[soundName].currentTime = 0; DOM.sounds[soundName].play(); } } catch(e) { /* ignore */ } }
+    function playSound(soundName) { if (isSoundEnabled) { try { if (DOM.sounds[soundName]) { DOM.sounds[soundName].currentTime = 0; DOM.sounds[soundName].play(); } } catch(e) { /* ignore */ } } }
     function stopSound(soundName) { try { if (DOM.sounds[soundName]) { DOM.sounds[soundName].pause(); DOM.sounds[soundName].currentTime = 0; } } catch(e) { /* ignore */ } }
     function setScreenVisibility(show, hide = []) { if (show) show.classList.remove('hidden'); hide.forEach(el => el.classList.add('hidden')); }
     function switchView(show, hide = []) { setScreenVisibility(show, hide); playSound('click'); }
@@ -258,7 +296,23 @@
         } else { errorEl.textContent = "Mã truy cập không chính xác. Vui lòng thử lại!"; }
     }
 
-    function selectAI(type) { chosenAI = type; switchView(DOM.menuContainer, [DOM.aiChoiceContainer]); updateVideoBackground('menu'); }
+    function selectAI(type) {
+        chosenAI = type;
+        switchView(DOM.menuContainer, [DOM.aiChoiceContainer]);
+        updateVideoBackground('menu');
+        startDashboard();
+    }
+    
+    function startDashboard() {
+        if(dashboardInterval) clearInterval(dashboardInterval);
+        const update = () => {
+            document.getElementById('systemStatus').textContent = 'ONLINE';
+            document.getElementById('networkPing').textContent = Math.floor(Math.random() * (70 - 20) + 20) + 'ms';
+            document.getElementById('activeAI').textContent = chosenAI === 'gen4' ? 'THẾ HỆ 4' : 'CƠ BẢN';
+        };
+        update();
+        dashboardInterval = setInterval(update, 3000);
+    }
 
     function showGameSelection() {
         const gameList = document.getElementById('game-list');
@@ -267,7 +321,7 @@
             const gameButton = document.createElement('button');
             gameButton.className = 'game-btn';
             gameButton.textContent = game.name;
-            gameButton.onclick = () => { playSound('click'); startSpecificScan(game); };
+            gameButton.onclick = () => { playSound('click'); startSpecificScan(game, 'analysis'); };
             gameList.appendChild(gameButton);
         });
         switchView(DOM.gameSelectionContainer, [DOM.menuContainer]);
@@ -276,35 +330,61 @@
     function startAutoScan() {
         playSound('click');
         const randomGame = gameData[Math.floor(Math.random() * gameData.length)];
-        startSpecificScan(randomGame);
+        startSpecificScan(randomGame, 'analysis');
+    }
+    
+    function startJarHunt() {
+        playSound('click');
+        const randomGame = gameData[Math.floor(Math.random() * gameData.length)];
+        startSpecificScan(randomGame, 'jarHunt');
     }
 
-    function startSpecificScan(game) {
+    function startSpecificScan(game, mode) {
         const loadingGif = document.getElementById('loadingGif');
+        const scanTitle = document.getElementById('scanTitle');
         loadingGif.src = (chosenAI === 'gen4') ? 'https://i.ibb.co/C30H2ZYr/Nft-Hacker-GIF-by-Cyber-Brokers.gif' : 'https://i.ibb.co/nsw6D7cw/Art-Animation-GIF-by-xponentialdesign.gif';
+        scanTitle.textContent = (mode === 'jarHunt') ? 'ĐANG QUÉT CÁC GAME CÓ HŨ LỚN...' : 'ĐANG PHÂN TÍCH LỖ HỔNG...';
         setScreenVisibility(DOM.scanningContainer, [DOM.gameSelectionContainer, DOM.resultContainer, DOM.menuContainer]);
         updateVideoBackground('none');
         playSound('scan');
-        setTimeout(() => showResults(game), 4500);
+        setTimeout(() => showResults(game, mode), 4500);
     }
     
-    function showResults(selectedGame) {
+    function showResults(selectedGame, mode) {
         stopSound('scan');
         playSound('success');
         setScreenVisibility(DOM.resultContainer, [DOM.scanningContainer]);
-        const winRate = (chosenAI === 'gen4') ? (Math.random() * (98.5 - 85) + 85) : (Math.random() * (92.5 - 75) + 75);
-        const spinCount = Math.floor(Math.random() * (250 - 120 + 1)) + 120;
-        const scatterRate = (Math.random() * (90 - 50) + 50);
-        document.getElementById('gameName').textContent = "KẾT QUẢ: " + selectedGame.name;
+        
+        document.getElementById('gameName').textContent = selectedGame.name;
         document.getElementById('gameImage').src = selectedGame.image;
-        animateCountUp(document.getElementById('winRate'), winRate, 2, '%');
-        animateCountUp(document.getElementById('spinCount'), spinCount, 0, ' vòng');
-        animateCountUp(document.getElementById('scatterRate'), scatterRate, 2, '%');
         const goldenTime = calculateGoldenTime();
         document.getElementById('goldenTime').textContent = goldenTime;
-        const historyEntry = { game: selectedGame, winRate, spinCount, scatterRate, goldenTime, timestamp: new Date() };
+
+        let historyEntry = { game: selectedGame, goldenTime, timestamp: new Date() };
+
+        if (mode === 'jarHunt') {
+            document.querySelector('.result-stats').classList.add('hidden');
+            const reasoningEl = document.getElementById('scanReasoning');
+            const randomSessions = Math.floor(Math.random() * 2000000) + 500000;
+            reasoningEl.innerHTML = `Phân tích <strong>${randomSessions.toLocaleString('vi-VN')}</strong> phiên gần nhất cho thấy game <strong>${selectedGame.name}</strong> đang có tần suất trả thưởng cao bất thường. Đề xuất vào ngay!`;
+            reasoningEl.classList.remove('hidden');
+            historyEntry.type = 'Săn Hũ';
+        } else {
+            document.querySelector('.result-stats').classList.remove('hidden');
+            document.getElementById('scanReasoning').classList.add('hidden');
+            const winRate = (chosenAI === 'gen4') ? (Math.random() * (98.5 - 85) + 85) : (Math.random() * (92.5 - 75) + 75);
+            const spinCount = Math.floor(Math.random() * (250 - 120 + 1)) + 120;
+            const scatterRate = (Math.random() * (90 - 50) + 50);
+            animateCountUp(document.getElementById('winRate'), winRate, 2, '%');
+            animateCountUp(document.getElementById('spinCount'), spinCount, 0, ' vòng');
+            animateCountUp(document.getElementById('scatterRate'), scatterRate, 2, '%');
+            historyEntry.type = 'Phân tích';
+            historyEntry.winRate = winRate;
+        }
+
         scanHistory.unshift(historyEntry);
         if (scanHistory.length > 5) scanHistory.pop();
+        
         document.getElementById('financeAllocatorContainer').classList.remove('hidden');
         document.getElementById('financeResult').innerHTML = "";
         document.getElementById('capitalInput').value = "";
@@ -320,7 +400,10 @@
             scanHistory.forEach(entry => {
                 const item = document.createElement('div');
                 item.className = 'history-item';
-                item.innerHTML = `<p><strong>Game:</strong> ${entry.game.name}</p><p><strong>Tỉ lệ thắng:</strong> ${entry.winRate.toFixed(2)}%</p><p><strong>Khung giờ vàng:</strong> ${entry.goldenTime}</p><p><small>Thời gian: ${entry.timestamp.toLocaleString('vi-VN')}</small></p>`;
+                let details = `<p><strong>Game:</strong> ${entry.game.name}</p><p><strong>Loại:</strong> ${entry.type}</p>`;
+                if(entry.winRate) details += `<p><strong>Tỉ lệ thắng:</strong> ${entry.winRate.toFixed(2)}%</p>`;
+                details += `<p><strong>Khung giờ vàng:</strong> ${entry.goldenTime}</p><p><small>Thời gian: ${entry.timestamp.toLocaleString('vi-VN')}</small></p>`;
+                item.innerHTML = details;
                 historyContent.appendChild(item);
             });
         }
@@ -334,17 +417,10 @@
         showModal(modal);
         playSound('scan');
         const logMessages = [
-            "ĐANG PHÂN TÍCH TÀI KHOẢN...",
-            "ĐANG KIỂM TRA LỊCH SỬ THẮNG...",
-            "ĐANG KIỂM TRA IP HIỆN TẠI...",
-            "<span style='color:var(--error-red)'>PHÁT HIỆN THEO DÕI TỪ SẢNH GAME!</span>",
-            "...................",
-            "ĐANG XOÁ THEO DÕI...",
-            "ĐANG XOÁ IP CŨ...",
-            "ĐANG THAY THẾ IP BẢO MẬT...",
-            "ĐANG LÀM SẠCH BỘ NHỚ ĐỆM...",
-            "<strong style='color:var(--primary-green)'>TÀI KHOẢN ĐÃ ĐƯỢC LÀM SẠCH VÀ BẢO VỆ.</strong>",
-            "<strong>BẢO MẬT KHÔI PHỤC 100%. CHÚC MAY MẮN!</strong>"
+            "ĐANG PHÂN TÍCH TÀI KHOẢN...", "ĐANG KIỂM TRA LỊCH SỬ THẮNG...", "ĐANG KIỂM TRA IP HIỆN TẠI...",
+            "<span style='color:var(--error-red)'>PHÁT HIỆN THEO DÕI TỪ SẢNH GAME!</span>", "...................", "ĐANG XOÁ THEO DÕI...",
+            "ĐANG XOÁ IP CŨ...", "ĐANG THAY THẾ IP BẢO MẬT...", "ĐANG LÀM SẠCH BỘ NHỚ ĐỆM...",
+            "<strong style='color:var(--primary-color)'>TÀI KHOẢN ĐÃ ĐƯỢC LÀM SẠCH VÀ BẢO VỆ.</strong>", "<strong>BẢO MẬT KHÔI PHỤC 100%. CHÚC MAY MẮN!</strong>"
         ];
         let i = 0;
         const interval = setInterval(() => {
@@ -365,8 +441,16 @@
         playSound('click');
         const capitalInput = document.getElementById('capitalInput'), resultDiv = document.getElementById('financeResult'), rawValue = parseInt(capitalInput.value, 10);
         if (isNaN(rawValue) || rawValue <= 0) { resultDiv.innerHTML = `<p style="color: var(--error-red);">Vui lòng nhập một số vốn hợp lệ.</p>`; return; }
-        const totalCapital = rawValue * 1000, percentages = [0.01, 0.02, 0.03], randomPercentage = percentages[Math.floor(Math.random() * percentages.length)], suggestedBet = totalCapital * randomPercentage;
-        resultDiv.innerHTML = `<p><strong>Tổng vốn:</strong> ${totalCapital.toLocaleString('vi-VN')} đ</p><p><strong>Mức cược đề xuất (${randomPercentage * 100}%):</strong> <span style="color: var(--primary-green); font-weight: bold;">${suggestedBet.toLocaleString('vi-VN')} đ/vòng</span></p>`;
+        const totalCapital = rawValue * 1000;
+        const exploreBet = (totalCapital * 0.01).toLocaleString('vi-VN');
+        const attackBet = (totalCapital * 0.025).toLocaleString('vi-VN');
+        const stopLoss = (totalCapital * 0.3).toLocaleString('vi-VN');
+        resultDiv.innerHTML = `
+            <p><strong>Tổng vốn:</strong> ${totalCapital.toLocaleString('vi-VN')} đ</p>
+            <p><strong>Giai đoạn 1 (Thăm dò):</strong> Cược <strong>${exploreBet} đ/vòng</strong> trong 15 vòng.</p>
+            <p><strong>Giai đoạn 2 (Tấn công):</strong> Nếu thắng lớn, tăng cược lên <strong>${attackBet} đ/vòng</strong>.</p>
+            <p><strong>Giai đoạn 3 (Bảo toàn):</strong> Nếu thua <strong>${stopLoss} đ</strong>, dừng lại và chạy lại Kiểm Tra Bảo Mật.</p>
+        `;
     }
     
     function calculateGoldenTime() {
@@ -381,8 +465,12 @@
         const counter = setInterval(() => { start += increment; currentFrame++; if (start > end) start = end; el.textContent = `${start.toFixed(decimals)}${suffix}`; if (currentFrame === totalFrames) clearInterval(counter); }, frameRate);
     }
     
-    function goBackToChoices() { switchView(DOM.aiChoiceContainer, [DOM.menuContainer]); updateVideoBackground('aiChoice'); }
-    function goBackToMenu() { switchView(DOM.menuContainer, [DOM.resultContainer, DOM.gameSelectionContainer]); updateVideoBackground('menu'); }
+    function goBackToChoices() {
+        if(dashboardInterval) clearInterval(dashboardInterval);
+        switchView(DOM.aiChoiceContainer, [DOM.menuContainer]);
+        updateVideoBackground('aiChoice');
+    }
+    function goBackToMenu() { switchView(DOM.menuContainer, [DOM.resultContainer, DOM.gameSelectionContainer]); updateVideoBackground('menu'); startDashboard(); }
     
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     
@@ -412,7 +500,18 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         startCinematicIntro();
-        document.querySelectorAll('button, .choice-card, .game-btn').forEach(el => el.addEventListener('click', () => playSound('click')));
+        document.getElementById('settingsBtn').addEventListener('click', () => { playSound('click'); showModal(DOM.modals.settings); });
+        document.getElementById('closeSettingsModalBtn').addEventListener('click', () => hideModal(DOM.modals.settings));
+        document.getElementById('soundToggle').addEventListener('change', (e) => { isSoundEnabled = e.target.checked; });
+        document.querySelectorAll('.swatch').forEach(swatch => {
+            swatch.addEventListener('click', (e) => {
+                document.documentElement.style.setProperty('--primary-color', e.target.dataset.color);
+                document.documentElement.style.setProperty('--border-color', e.target.dataset.color+'40');
+                document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+
         document.getElementById('calculateFinanceBtn').addEventListener('click', calculateAndDisplayFinance);
         document.getElementById('choiceAILongBao').addEventListener('click', () => selectAI('base'));
         document.getElementById('choiceAILongBao4').addEventListener('click', () => { playSound('click'); showModal(DOM.modals.code); });
@@ -423,6 +522,7 @@
         document.getElementById('closeCodeModalBtn').addEventListener('click', () => hideModal(DOM.modals.code));
         document.getElementById('autoScanBtn').addEventListener('click', startAutoScan);
         document.getElementById('startAnalysisBtn').addEventListener('click', showGameSelection);
+        document.getElementById('jarHuntBtn').addEventListener('click', startJarHunt);
         document.getElementById('historyBtn').addEventListener('click', displayScanHistory);
         document.getElementById('securityCheckBtn').addEventListener('click', runSecurityCheck);
         document.getElementById('capitalPreserveBtn').addEventListener('click', () => { playSound('click'); showModal(DOM.modals.capital); });
