@@ -18,7 +18,6 @@
             --error-red: #ff4757;
             --aurora-speed: 5s;
         }
-
         @keyframes aurora-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes aurora-border-glow { 0% { border-color: hsl(180, 100%, 50%); box-shadow: 0 0 15px hsl(180, 100%, 50%); } 25% { border-color: hsl(240, 100%, 65%); box-shadow: 0 0 20px hsl(240, 100%, 65%); } 50% { border-color: hsl(300, 100%, 60%); box-shadow: 0 0 15px hsl(300, 100%, 60%); } 75% { border-color: hsl(60, 100%, 50%); box-shadow: 0 0 20px hsl(60, 100%, 50%); } 100% { border-color: hsl(180, 100%, 50%); box-shadow: 0 0 15px hsl(180, 100%, 50%); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 30px, 0) scale(0.98); } to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); } }
@@ -32,7 +31,7 @@
         #video-background iframe { position: absolute; top: 50%; left: 50%; width: 100vw; height: 100vh; transform: translate(-50%, -50%); object-fit: cover; transition: opacity 0.7s ease-in-out; opacity: 0; pointer-events: none; }
         #video-background iframe.active { opacity: 1; }
 
-        #cinematicIntroOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity 1s ease-out; }
+        #cinematicIntroOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity 1s ease-out; cursor: pointer; }
         #introTextContainer { text-align: center; }
         #introTextContainer h1 { font-family: 'Orbitron', sans-serif; font-size: 2.5em; text-transform: uppercase; color: #fff; text-shadow: 0 0 15px var(--primary-green); opacity: 0; transition: opacity 0.8s ease-in-out; }
         #introTextContainer h1.visible { opacity: 1; }
@@ -41,16 +40,16 @@
         .page-container { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 100vh; padding: 20px; box-sizing: border-box; }
         .form-container, .main-content { border: 2px solid; border-radius: var(--container-radius); padding: 30px 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); animation: aurora-border-glow var(--aurora-speed) linear infinite, fadeInUp 0.8s ease-out; text-align: center; }
         .form-container { background: rgba(13, 17, 23, 0.45); backdrop-filter: none; -webkit-backdrop-filter: none; }
-        .main-content { background: var(--container-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .main-content { background: var(--container-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); max-width: 620px; }
 
         #loginLogo { max-width: 120px; margin-bottom: 25px; border-radius: 50%; border: 3px solid var(--primary-green); }
-        .intro-title, header h1 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; background: linear-gradient(90deg, #00ffc8, #ff00c1, #ffb300, #00ffc8); background-size: 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: aurora-flow 8s linear infinite; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .intro-title, header h1, #welcomeMessage { font-family: 'Orbitron', sans-serif; text-transform: uppercase; background: linear-gradient(90deg, #00ffc8, #ff00c1, #ffb300, #00ffc8); background-size: 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: aurora-flow 8s linear infinite; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
         .intro-title { font-size: 2em; margin-bottom: 30px; }
         header h1 { font-size: 1.8em; margin: 0; }
+        #welcomeMessage { font-size: 1.1em; margin-bottom: 20px; }
 
         header { width: 100%; background-color: rgba(13, 17, 23, 0.8); padding: 15px; text-align: center; border-bottom: 2px solid; border-image: linear-gradient(90deg, #00ffc8, #ff00c1, #ffb300) 1; backdrop-filter: blur(10px); box-sizing: border-box; }
-        .main-content { padding: 20px; width: 100%; max-width: 580px; margin-top: 20px; }
-        #aiChoiceContainer, #menuContainer, #scanningContainer, #resultContainer { display: flex; flex-direction: column; gap: 20px; animation: fadeInUp 0.6s ease-out forwards; }
+        #aiChoiceContainer, #menuContainer, #scanningContainer, #resultContainer, #gameSelectionContainer { display: flex; flex-direction: column; gap: 20px; animation: fadeInUp 0.6s ease-out forwards; }
 
         input[type="text"], input[type="number"] { padding: 14px 20px; margin: 10px 0; width: 100%; max-width: 300px; border-radius: var(--button-radius); border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-light); font-size: 1em; box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); transition: all 0.3s; box-sizing: border-box; }
         input[type="text"]:focus, input[type="number"]:focus { outline: none; border-color: var(--primary-green); box-shadow: 0 0 10px var(--primary-green); }
@@ -58,30 +57,42 @@
         .action-button:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 10px 20px rgba(f5, 87, 108, 0.4); }
         .choice-card, .menu-btn, .back-btn { border: 2px solid transparent; border-radius: var(--container-radius); padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease-in-out; background: rgba(22, 27, 34, 0.8); backdrop-filter: blur(5px); }
         .choice-card:hover, .menu-btn:hover, .back-btn:hover { transform: translateY(-5px); border-color: var(--primary-green); background: rgba(35, 42, 53, 0.9); }
+        .choice-card.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
         .choice-card h3 { margin-top: 0; font-size: 1.5em; }
         .menu-btn, .back-btn { width: 100%; font-size: 1.1em; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; box-sizing: border-box; padding: 16px; }
         #error, #codeError { color: var(--error-red); margin-top: 20px; font-weight: bold; min-height: 1.2em; }
         
         #scanningContainer { text-align: center; }
         #loadingGif { max-width: 150px; margin: 15px auto; mix-blend-mode: screen; border-radius: 8px; }
-        #resultContainer h2, #scanningContainer h3, #financeAllocatorContainer h3 { background: linear-gradient(90deg, #00ffc8, #ff00c1, #ffb300, #00ffc8); background-size: 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: aurora-flow 8s linear infinite; }
+        #resultContainer h2, #scanningContainer h3, #financeAllocatorContainer h3, #gameSelectionContainer h3 { background: linear-gradient(90deg, #00ffc8, #ff00c1, #ffb300, #00ffc8); background-size: 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: aurora-flow 8s linear infinite; }
         .result-stats { padding: 15px; margin-top: 15px; }
         .result-stats p strong { color: transparent; background: linear-gradient(90deg, #00ffc8, #ffb300); -webkit-background-clip: text; background-clip: text; }
         #goldenTimeContainer { background: linear-gradient(45deg, #ffc107, #ff9800); color: var(--bg-dark-theme); padding: 15px; border-radius: var(--container-radius); margin-top: 20px; text-align: center; border: 2px solid #ffeb3b; box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); animation: pulse 2s infinite alternate; }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; z-index: 9000; backdrop-filter: blur(5px); }
-        .modal-content { padding: 30px; width: 90%; max-width: 450px; text-align: center; background: var(--container-bg); border: 2px solid; border-radius: var(--container-radius); animation: aurora-border-glow var(--aurora-speed) linear infinite, fadeInUp 0.5s ease-out; box-sizing: border-box; }
+        .modal-content { padding: 30px; width: 90%; max-width: 500px; text-align: center; background: var(--container-bg); border: 2px solid; border-radius: var(--container-radius); animation: aurora-border-glow var(--aurora-speed) linear infinite, fadeInUp 0.5s ease-out; box-sizing: border-box; }
         .modal-content h2 { font-family: 'Orbitron', sans-serif; }
-        #securityMessage { text-align: left; line-height: 1.8; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; }
+        #securityMessage { text-align: left; line-height: 1.8; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; height: 250px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; }
 
         #registration-banner { margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 20px; font-size: 0.9em; opacity: 0.9; }
         #registration-banner p { margin: 8px 0; }
         #registration-banner a { color: var(--primary-green); text-decoration: none; font-weight: bold; }
         #registration-banner a:hover { text-decoration: underline; }
-
+        
+        #game-list { max-height: 40vh; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .game-btn { background: rgba(22, 27, 34, 0.8); border: 1px solid var(--border-color); color: var(--text-light); padding: 15px 10px; border-radius: var(--button-radius); cursor: pointer; transition: all 0.3s ease; text-align: center; font-size: 0.9em; }
+        .game-btn:hover { background: var(--primary-green); color: var(--bg-dark-theme); font-weight: bold; }
+        
+        #historyContent { max-height: 50vh; overflow-y: auto; text-align: left; }
+        .history-item { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid var(--primary-green); }
+        .history-item p { margin: 5px 0; }
     </style>
 </head>
 <body>
+
+<audio id="clickSound" src="https://www.myinstants.com/media/sounds/mouse-click.mp3" preload="auto"></audio>
+<audio id="scanSound" src="https://www.myinstants.com/media/sounds/modem-dial-up-4.mp3" loop preload="auto"></audio>
+<audio id="successSound" src="https://www.myinstants.com/media/sounds/correct-answer.mp3" preload="auto"></audio>
 
 <div id="video-background">
     <iframe id="video-login" src="https://streamable.com/e/p75ki3?autoplay=1&mute=1&loop=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
@@ -105,12 +116,10 @@
         <input type="text" id="loginCode" placeholder="Mã truy cập" />
         <button class="action-button" onclick="checkLoginCode()">Xác nhận</button>
         <p id="error"></p>
-        
         <div id="registration-banner">
             <p>ĐĂNG KÍ TÀI KHOẢN TẠI <a href="http://www.f168.codes" target="_blank" rel="noopener noreferrer">WWW.F168.CODES</a></p>
             <p>LIÊN HỆ LONG BẢO: <span style="color: var(--primary-green); font-weight: bold;">@LONGBAOF168</span></p>
         </div>
-
     </div>
 </div>
 
@@ -120,18 +129,27 @@
     </header>
     <div class="main-content">
         <div id="aiChoiceContainer">
+            <p id="welcomeMessage"></p>
             <div class="choice-card" id="choiceAILongBao"> <h3 class="orbitron-font">A.I LONG BẢO</h3> <p>Phiên bản cơ bản</p> </div>
             <div class="choice-card" id="choiceAILongBao4"> <h3 class="orbitron-font">A.I LONG BẢO THẾ HỆ 4</h3> <p>Phiên bản nâng cao (yêu cầu mã)</p> </div>
+            <div class="choice-card disabled"> <h3 class="orbitron-font">A.I THẾ HỆ 5</h3> <p>(SẮP RA MẮT)</p> </div>
         </div>
         <div id="menuContainer" class="hidden">
-            <button class="menu-btn orbitron-font" id="startScanBtn">Quét Lỗ Hổng</button>
+            <button class="menu-btn orbitron-font" id="autoScanBtn">Tự Động Quét</button>
+            <button class="menu-btn orbitron-font" id="startAnalysisBtn">Phân Tích Game</button>
+            <button class="menu-btn orbitron-font" id="historyBtn">Lịch sử quét</button>
             <button class="menu-btn orbitron-font" id="securityCheckBtn">Kiểm Tra Bảo Mật</button>
             <button class="menu-btn orbitron-font" id="capitalPreserveBtn">Bảo Toàn Vốn</button>
             <button class="back-btn orbitron-font" id="backToChoiceBtn">Quay Lại Chọn A.I</button>
         </div>
+        <div id="gameSelectionContainer" class="hidden">
+            <h3 class="orbitron-font">CHỌN GAME ĐỂ PHÂN TÍCH</h3>
+            <div id="game-list"></div>
+            <button class="back-btn orbitron-font" id="backToMenuFromGameSelectBtn" style="margin-top: 20px;">Quay Lại Menu</button>
+        </div>
         <div id="scanningContainer" class="hidden">
-            <h3 class="orbitron-font">ĐANG QUÉT LỖ HỔNG...</h3>
-            <img src="https://i.ibb.co/nsw6D7cw/Art-Animation-GIF-by-xponentialdesign.gif" alt="Scanning..." id="loadingGif">
+            <h3 class="orbitron-font">ĐANG PHÂN TÍCH LỖ HỔNG...</h3>
+            <img src="" alt="Scanning..." id="loadingGif">
         </div>
         <div id="resultContainer" class="hidden">
             <h2 class="orbitron-font" id="gameName"></h2>
@@ -145,7 +163,6 @@
                 <h3 class="orbitron-font">🌟 KHUNG GIỜ VÀNG 🌟</h3>
                 <span id="goldenTime">Đang tính toán...</span>
             </div>
-            
             <div id="financeAllocatorContainer" class="hidden" style="margin-top: 25px; border-top: 2px solid var(--border-color); padding-top: 20px;">
                 <h3 class="orbitron-font">PHÂN CHIA TÀI CHÍNH</h3>
                 <p style="font-size: 0.9em; opacity: 0.8;">Nhập tổng vốn để nhận gợi ý cược.</p>
@@ -153,7 +170,6 @@
                 <button id="calculateFinanceBtn" class="action-button" style="padding: 10px 25px; font-size: 1em; margin-top: 10px;">Phân Chia Vốn</button>
                 <div id="financeResult" style="margin-top: 20px; text-align: left; padding: 15px; background: rgba(0,0,0,0.25); border-radius: 8px; line-height: 1.8;"></div>
             </div>
-
             <button class="back-btn orbitron-font" id="backToMenuBtn" style="margin-top: 25px;">Quay Lại Menu</button>
         </div>
     </div>
@@ -171,9 +187,7 @@
 <div id="securityCheckModal" class="modal-overlay hidden">
     <div class="modal-content">
         <h2>KIỂM TRA BẢO MẬT</h2>
-        <div id="securityCheckContent">
-             <p id="securityMessage"></p>
-        </div>
+        <p id="securityMessage"></p>
         <button id="closeSecurityModalBtn" class="action-button hidden" style="padding: 10px 20px; font-size: 0.9em; margin-top: 15px;">Đã Hiểu</button>
     </div>
 </div>
@@ -182,6 +196,13 @@
         <h2>CẢNH BÁO</h2>
         <p id="capitalWarningText" style="color: #f5a623;">VUI LÒNG NẠP TRÊN 2TR ĐỂ KÍCH HOẠT HOẶC LIÊN HỆ @LONGBAOF168</p>
         <button id="closeWarningModalBtn" class="action-button" style="padding: 10px 20px; font-size: 0.9em;">Đóng</button>
+    </div>
+</div>
+<div id="historyModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <h2>LỊCH SỬ QUÉT</h2>
+        <div id="historyContent"></div>
+        <button id="closeHistoryModalBtn" class="action-button" style="padding: 10px 20px; font-size: 0.9em;">Đóng</button>
     </div>
 </div>
 <div id="inactivityWarningModal" class="modal-overlay hidden" style="z-index: 11000;">
@@ -193,105 +214,166 @@
 
 
 <script>
+    // --- KHAI BÁO BIẾN TOÀN CỤC ---
     const validLoginCodes = ["167904", "582173", "907348", "213560", "638901", "475289", "801452", "026815", "749063", "350728"];
     const gen4Codes = ["LB4-98A1", "LB4-33B7", "LB4-C45D", "LB4-E6F2", "LB4-770A", "LB4-B81C", "LB4-D29E", "LB4-F333", "LB4-84G5", "LB4-H6I9"];
     let chosenAI = null;
+    let loggedInUsername = '';
+    let scanHistory = [];
     const gameData = [ { name: 'BA CON HEO NHỎ', image: 'https://i.ibb.co/Q3dYksdQ/BA-CON-HEO-NH.jpg' }, { name: 'BÃO KỊCH NGON NGỌT', image: 'https://i.ibb.co/h1XkFxcw/B-O-K-CH-NG-NG-T.jpg' }, { name: 'BÃO KIM TIỀN', image: 'https://i.ibb.co/KpXRkb4n/B-O-KIM-TI-N.jpg' }, { name: 'CUỒNG NỘ MÈO', image: 'https://i.ibb.co/jvnT8Qm1/CU-I-N-M.jpg' }, { name: 'THẦN TÀI GIÁ ĐÁO', image: 'https://i.ibb.co/jXvqdpd/default-4.jpg' }, { name: 'JOKER', image: 'https://i.ibb.co/21C53TfM/JOKER.jpg' }, { name: 'NỮ HOÀNG INCA', image: 'https://i.ibb.co/JRgCH2CC/N-HO-NG-INCA.jpg' }, { name: 'ALIBABA', image: 'https://i.ibb.co/6JJzg75v/ALIBABA.jpg' }, { name: 'BÓNG THÁCH ĐẤU 2', image: 'https://i.ibb.co/bjS6ztq7/B-O-TH-CH-2.jpg' }, { name: 'QUYỀN VƯƠNG', image: 'https://i.ibb.co/Y4Pky0NW/QUY-N-V-NG.jpg' }, { name: 'SIN CITY', image: 'https://i.ibb.co/FbLYFC28/SINCITY.jpg' }, { name: 'SUPER ACE', image: 'https://i.ibb.co/0z7rq0R/SUPER-ACE.jpg' }, { name: 'THÀNH PHỐ VÀNG', image: 'https://i.ibb.co/5XpkCZ9Z/TH-NH-PH-V-NG.jpg' }, { name: 'TRÂU HÚC', image: 'https://i.ibb.co/N5Dst5n/TR-U-H-C.jpg' }, { name: 'ĐƯỜNG MẠT CHƯỢC 2', image: 'https://i.ibb.co/9HzhpDSZ/NG-M-T-CH-C-2.jpg' }, { name: 'ĐƯỜNG MẠT CHƯỢT', image: 'https://i.ibb.co/CsvS9Jq7/NG-M-T-CH-T.jpg' }, { name: 'GANESHA VÀNG', image: 'https://i.ibb.co/tPKDFgXJ/GANESHA-V-NG.jpg' }, { name: 'KỲ LÂN MẠ VÀNG', image: 'https://i.ibb.co/S7srXvxc/K-L-N-M-CH-N-C.jpg' }, { name: 'KHO BÁU AZTEC', image: 'https://i.ibb.co/x8g4Yjb3/KHO-B-U-AZTEC.jpg' }, { name: 'MEDUSA 1: LỜI NGUYỀN ATHENA', image: 'https://i.ibb.co/DD4JSsQ1/MEDUSA-1-L-I-NGUY-N.jpg' }, { name: 'MEDUSA', image: 'https://i.ibb.co/cKvJ8hQf/MEDUSA.jpg' }, { name: 'NEKO MAY MẮN', image: 'https://i.ibb.co/RTjCsDvf/NEKO-MAY-M-N.jpg' }, { name: 'NỮ HOÀNG TIỀN THƯỞNG', image: 'https://i.ibb.co/fVxjh4rC/N-HO-NG-TI-N-TH-NG.jpg' }, { name: 'QUỶ TỬ CHIẾN TIỀN THƯỞNG', image: 'https://i.ibb.co/7Nx37ftx/QUY-T-CHI-N-TI-N-TH-NG.jpg' }, { name: 'THỎ MAY MẮN', image: 'https://i.ibb.co/RTXxqQP0/TH-MAY-M-N.jpg' }, { name: 'VUA KHỦNG LONG', image: 'https://i.ibb.co/gbTBKrjg/VUA-C-NG-LONG.jpg' }, { name: 'WILD OTTER', image: 'https://i.ibb.co/srLdPjG/WILD-O-T-C.jpg' }, { name: 'ZOMBIE BREAKER', image: 'https://i.ibb.co/wFnHkL3N/ZOMBIE-BREAKER.jpg' }, { name: 'LỄ HỘI BIA', image: 'https://i.ibb.co/8gwq7PmY/U-B-P-B-N.jpg' }, { name: 'KHU TIỀN MẶT 777', image: 'https://i.ibb.co/SD2Rgf31/KHU-TI-N-M-T-777.jpg' }, { name: 'NOEL BIG BANG', image: 'https://i.ibb.co/Z69fZ2qZ/NOEL-BIG-BANG.jpg' }, { name: 'NGÀY TẬN THẾ', image: 'https://i.ibb.co/Rk2tR28N/NG-Y-T-N-TH.jpg' }, { name: 'NHIỆM VỤ BERMUDA', image: 'https://i.ibb.co/DHG22BF5/NHI-M-V-BERMUDA.jpg' }, { name: 'RACING BULL', image: 'https://i.ibb.co/gbFw5MsH/RACING-BULL.jpg' }, { name: 'RISE OF SAMURAI 4', image: 'https://i.ibb.co/bg6TG5vp/RISE-OF-SAMURAI-4.jpg' }, { name: 'SUGAR RUSH 1000', image: 'https://i.ibb.co/ZjGNbk8/SUGAR-RUSH-1000.jpg' }, { name: 'TIK TAC TAKE', image: 'https://i.ibb.co/fYf5ZfD7/TIK-TAC-TAK.jpg' }, { name: 'VẬN MAY GIZA', image: 'https://i.ibb.co/qYyTgdMS/V-N-MAY-GIZA.jpg' } ];
-    const DOM = { cinematicIntro: document.getElementById('cinematicIntroOverlay'), loginScreen: document.getElementById('loginScreen'), appScreen: document.getElementById('appScreen'), aiChoiceContainer: document.getElementById('aiChoiceContainer'), menuContainer: document.getElementById('menuContainer'), scanningContainer: document.getElementById('scanningContainer'), resultContainer: document.getElementById('resultContainer'), videos: { login: document.getElementById('video-login'), aiChoice: document.getElementById('video-ai-choice'), menu: document.getElementById('video-menu'), }, modals: { code: document.getElementById('codeEntryModal'), security: document.getElementById('securityCheckModal'), capital: document.getElementById('capitalWarningModal'), inactivity: document.getElementById('inactivityWarningModal') } };
     
-    let inactivityTimer;
+    const DOM = {
+        cinematicIntro: document.getElementById('cinematicIntroOverlay'), loginScreen: document.getElementById('loginScreen'), appScreen: document.getElementById('appScreen'), aiChoiceContainer: document.getElementById('aiChoiceContainer'), menuContainer: document.getElementById('menuContainer'), scanningContainer: document.getElementById('scanningContainer'), resultContainer: document.getElementById('resultContainer'), gameSelectionContainer: document.getElementById('gameSelectionContainer'),
+        videos: { login: document.getElementById('video-login'), aiChoice: document.getElementById('video-ai-choice'), menu: document.getElementById('video-menu') },
+        modals: { code: document.getElementById('codeEntryModal'), security: document.getElementById('securityCheckModal'), capital: document.getElementById('capitalWarningModal'), inactivity: document.getElementById('inactivityWarningModal'), history: document.getElementById('historyModal') },
+        sounds: { click: document.getElementById('clickSound'), scan: document.getElementById('scanSound'), success: document.getElementById('successSound') }
+    };
+    
+    let inactivityTimer, introHasEnded = false;
 
-    function switchView(show, hide = []) { if (show) show.classList.remove('hidden'); hide.forEach(el => el.classList.add('hidden')); }
+    // --- CÁC HÀM TIỆN ÍCH ---
+    function playSound(soundName) { try { if (DOM.sounds[soundName]) { DOM.sounds[soundName].currentTime = 0; DOM.sounds[soundName].play(); } } catch(e) { /* ignore */ } }
+    function stopSound(soundName) { try { if (DOM.sounds[soundName]) { DOM.sounds[soundName].pause(); DOM.sounds[soundName].currentTime = 0; } } catch(e) { /* ignore */ } }
+    function setScreenVisibility(show, hide = []) { if (show) show.classList.remove('hidden'); hide.forEach(el => el.classList.add('hidden')); }
+    function switchView(show, hide = []) { setScreenVisibility(show, hide); playSound('click'); }
     function updateVideoBackground(activeVideo) { Object.values(DOM.videos).forEach(video => video.classList.remove('active')); if (DOM.videos[activeVideo]) DOM.videos[activeVideo].classList.add('active'); }
+    function showModal(modal) { modal.classList.remove('hidden'); }
+    function hideModal(modal) { modal.classList.add('hidden'); playSound('click'); }
 
+    // --- LOGIC CHÍNH CỦA ỨNG DỤNG ---
     function checkLoginCode() {
+        playSound('click');
         const usernameInput = document.getElementById("username"), codeInput = document.getElementById("loginCode"), errorEl = document.getElementById("error");
         const username = usernameInput.value.trim(), code = codeInput.value.trim();
         if (!username) { errorEl.textContent = "Vui lòng nhập Tên tài khoản!"; return; }
         if (!code) { errorEl.textContent = "Vui lòng nhập Mã truy cập!"; return; }
-        if (validLoginCodes.includes(code)) { errorEl.textContent = ""; switchView(DOM.appScreen, [DOM.loginScreen]); switchView(DOM.aiChoiceContainer, [DOM.menuContainer, DOM.scanningContainer, DOM.resultContainer]); updateVideoBackground('aiChoice');
+        if (validLoginCodes.includes(code)) {
+            playSound('success');
+            loggedInUsername = username;
+            document.getElementById('welcomeMessage').textContent = `XIN CHÀO, ${loggedInUsername.toUpperCase()}`;
+            errorEl.textContent = "";
+            setScreenVisibility(DOM.appScreen, [DOM.loginScreen]);
+            setScreenVisibility(DOM.aiChoiceContainer, [DOM.menuContainer, DOM.gameSelectionContainer, DOM.scanningContainer, DOM.resultContainer]);
+            updateVideoBackground('aiChoice');
         } else { errorEl.textContent = "Mã truy cập không chính xác. Vui lòng thử lại!"; }
     }
 
     function selectAI(type) { chosenAI = type; switchView(DOM.menuContainer, [DOM.aiChoiceContainer]); updateVideoBackground('menu'); }
-    
-    function startScan() {
-        const loadingGif = document.getElementById('loadingGif');
-        if (chosenAI === 'gen4') {
-            loadingGif.src = 'https://i.ibb.co/C30H2ZYr/Nft-Hacker-GIF-by-Cyber-Brokers.gif';
-        } else {
-            loadingGif.src = 'https://i.ibb.co/nsw6D7cw/Art-Animation-GIF-by-xponentialdesign.gif';
-        }
-        switchView(DOM.scanningContainer, [DOM.menuContainer, DOM.resultContainer]);
-        updateVideoBackground('none');
-        setTimeout(showResults, 3500);
-    }
-    
-    function runSecurityCheck() {
-        const modal = DOM.modals.security;
-        const messageEl = document.getElementById('securityMessage');
-        const closeBtn = document.getElementById('closeSecurityModalBtn');
-        
-        messageEl.innerHTML = "";
-        closeBtn.classList.add('hidden');
-        showModal(modal);
 
-        const logMessages = ["ĐANG PHÂN TÍCH TÀI KHOẢN...", "ĐANG KIỂM TRA LỊCH SỬ THẮNG...", "ĐANG KIỂM TRA IP HIỆN TẠI...", "...................", "ĐANG XOÁ IP HIỆN TẠI", "ĐANG THAY THẾ IP MỚI", "ĐANG XOÁ THEO DÕI TỪ SẢNH GAME", "ĐANG KHÔI PHỤC TÀI KHOẢN...", "ĐANG LÀM SẠCH TOÀN BỘ TÀI KHOẢN...", "<strong style='color:var(--primary-green)'>TÀI KHOẢN ĐÃ ĐƯỢC KHÔI PHỤC 100%</strong>", "<strong>HÃY VÔ GAME !</strong>" ];
-        let i = 0;
-        const interval = setInterval(() => {
-            if (i < logMessages.length) {
-                messageEl.innerHTML += logMessages[i] + "<br>";
-                i++;
-            } else {
-                clearInterval(interval);
-                closeBtn.classList.remove('hidden');
-            }
-        }, 800);
+    function showGameSelection() {
+        const gameList = document.getElementById('game-list');
+        gameList.innerHTML = '';
+        gameData.forEach(game => {
+            const gameButton = document.createElement('button');
+            gameButton.className = 'game-btn';
+            gameButton.textContent = game.name;
+            gameButton.onclick = () => { playSound('click'); startSpecificScan(game); };
+            gameList.appendChild(gameButton);
+        });
+        switchView(DOM.gameSelectionContainer, [DOM.menuContainer]);
     }
     
-    function showResults() {
-        switchView(DOM.resultContainer, [DOM.scanningContainer]);
-        const selectedGame = gameData[Math.floor(Math.random() * gameData.length)];
+    function startAutoScan() {
+        playSound('click');
+        const randomGame = gameData[Math.floor(Math.random() * gameData.length)];
+        startSpecificScan(randomGame);
+    }
+
+    function startSpecificScan(game) {
+        const loadingGif = document.getElementById('loadingGif');
+        loadingGif.src = (chosenAI === 'gen4') ? 'https://i.ibb.co/C30H2ZYr/Nft-Hacker-GIF-by-Cyber-Brokers.gif' : 'https://i.ibb.co/nsw6D7cw/Art-Animation-GIF-by-xponentialdesign.gif';
+        setScreenVisibility(DOM.scanningContainer, [DOM.gameSelectionContainer, DOM.resultContainer, DOM.menuContainer]);
+        updateVideoBackground('none');
+        playSound('scan');
+        setTimeout(() => showResults(game), 4500);
+    }
+    
+    function showResults(selectedGame) {
+        stopSound('scan');
+        playSound('success');
+        setScreenVisibility(DOM.resultContainer, [DOM.scanningContainer]);
         const winRate = (chosenAI === 'gen4') ? (Math.random() * (98.5 - 85) + 85) : (Math.random() * (92.5 - 75) + 75);
         const spinCount = Math.floor(Math.random() * (250 - 120 + 1)) + 120;
-        const scatterRate = (chosenAI === 'gen4') ? (Math.random() * (90 - 65) + 65) : (Math.random() * (75 - 50) + 50);
+        const scatterRate = (Math.random() * (90 - 50) + 50);
         document.getElementById('gameName').textContent = "KẾT QUẢ: " + selectedGame.name;
         document.getElementById('gameImage').src = selectedGame.image;
         animateCountUp(document.getElementById('winRate'), winRate, 2, '%');
         animateCountUp(document.getElementById('spinCount'), spinCount, 0, ' vòng');
         animateCountUp(document.getElementById('scatterRate'), scatterRate, 2, '%');
-        calculateGoldenTime();
+        const goldenTime = calculateGoldenTime();
+        document.getElementById('goldenTime').textContent = goldenTime;
+        const historyEntry = { game: selectedGame, winRate, spinCount, scatterRate, goldenTime, timestamp: new Date() };
+        scanHistory.unshift(historyEntry);
+        if (scanHistory.length > 5) scanHistory.pop();
         document.getElementById('financeAllocatorContainer').classList.remove('hidden');
         document.getElementById('financeResult').innerHTML = "";
         document.getElementById('capitalInput').value = "";
     }
     
-    function calculateAndDisplayFinance() {
-        const capitalInput = document.getElementById('capitalInput');
-        const resultDiv = document.getElementById('financeResult');
-        const rawValue = parseInt(capitalInput.value, 10);
-
-        if (isNaN(rawValue) || rawValue <= 0) {
-            resultDiv.innerHTML = `<p style="color: var(--error-red);">Vui lòng nhập một số vốn hợp lệ.</p>`;
-            return;
+    function displayScanHistory() {
+        playSound('click');
+        const historyContent = document.getElementById('historyContent');
+        historyContent.innerHTML = '';
+        if (scanHistory.length === 0) {
+            historyContent.innerHTML = '<p>Chưa có lịch sử quét.</p>';
+        } else {
+            scanHistory.forEach(entry => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = `<p><strong>Game:</strong> ${entry.game.name}</p><p><strong>Tỉ lệ thắng:</strong> ${entry.winRate.toFixed(2)}%</p><p><strong>Khung giờ vàng:</strong> ${entry.goldenTime}</p><p><small>Thời gian: ${entry.timestamp.toLocaleString('vi-VN')}</small></p>`;
+                historyContent.appendChild(item);
+            });
         }
-
-        const totalCapital = rawValue * 1000;
-        const percentages = [0.01, 0.02, 0.03];
-        const randomPercentage = percentages[Math.floor(Math.random() * percentages.length)];
-        const suggestedBet = totalCapital * randomPercentage;
-
-        resultDiv.innerHTML = `
-            <p><strong>Tổng vốn:</strong> ${totalCapital.toLocaleString('vi-VN')} đ</p>
-            <p><strong>Mức cược đề xuất (${randomPercentage * 100}%):</strong> <span style="color: var(--primary-green); font-weight: bold;">${suggestedBet.toLocaleString('vi-VN')} đ/vòng</span></p>
-        `;
+        showModal(DOM.modals.history);
+    }
+    
+    function runSecurityCheck() {
+        const modal = DOM.modals.security, messageEl = document.getElementById('securityMessage'), closeBtn = document.getElementById('closeSecurityModalBtn');
+        messageEl.innerHTML = "";
+        closeBtn.classList.add('hidden');
+        showModal(modal);
+        playSound('scan');
+        const logMessages = [
+            "ĐANG PHÂN TÍCH TÀI KHOẢN...",
+            "ĐANG KIỂM TRA LỊCH SỬ THẮNG...",
+            "ĐANG KIỂM TRA IP HIỆN TẠI...",
+            "<span style='color:var(--error-red)'>PHÁT HIỆN THEO DÕI TỪ SẢNH GAME!</span>",
+            "...................",
+            "ĐANG XOÁ THEO DÕI...",
+            "ĐANG XOÁ IP CŨ...",
+            "ĐANG THAY THẾ IP BẢO MẬT...",
+            "ĐANG LÀM SẠCH BỘ NHỚ ĐỆM...",
+            "<strong style='color:var(--primary-green)'>TÀI KHOẢN ĐÃ ĐƯỢC LÀM SẠCH VÀ BẢO VỆ.</strong>",
+            "<strong>BẢO MẬT KHÔI PHỤC 100%. CHÚC MAY MẮN!</strong>"
+        ];
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < logMessages.length) {
+                messageEl.innerHTML += logMessages[i] + "<br>";
+                messageEl.scrollTop = messageEl.scrollHeight;
+                i++;
+            } else {
+                clearInterval(interval);
+                stopSound('scan');
+                playSound('success');
+                closeBtn.classList.remove('hidden');
+            }
+        }, 900);
+    }
+    
+    function calculateAndDisplayFinance() {
+        playSound('click');
+        const capitalInput = document.getElementById('capitalInput'), resultDiv = document.getElementById('financeResult'), rawValue = parseInt(capitalInput.value, 10);
+        if (isNaN(rawValue) || rawValue <= 0) { resultDiv.innerHTML = `<p style="color: var(--error-red);">Vui lòng nhập một số vốn hợp lệ.</p>`; return; }
+        const totalCapital = rawValue * 1000, percentages = [0.01, 0.02, 0.03], randomPercentage = percentages[Math.floor(Math.random() * percentages.length)], suggestedBet = totalCapital * randomPercentage;
+        resultDiv.innerHTML = `<p><strong>Tổng vốn:</strong> ${totalCapital.toLocaleString('vi-VN')} đ</p><p><strong>Mức cược đề xuất (${randomPercentage * 100}%):</strong> <span style="color: var(--primary-green); font-weight: bold;">${suggestedBet.toLocaleString('vi-VN')} đ/vòng</span></p>`;
     }
     
     function calculateGoldenTime() {
         const now = new Date(), startOffset = Math.floor(Math.random() * 21) + 5, endTime = startOffset + (Math.floor(Math.random() * 6) + 10);
         const startTime = new Date(now.getTime() + startOffset * 60000), finalEndTime = new Date(now.getTime() + endTime * 60000);
         const formatTime = (date) => date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-        document.getElementById('goldenTime').textContent = `${formatTime(startTime)} - ${formatTime(finalEndTime)}`;
+        return `${formatTime(startTime)} - ${formatTime(finalEndTime)}`;
     }
 
     function animateCountUp(el, end, decimals, suffix) {
@@ -300,60 +382,58 @@
     }
     
     function goBackToChoices() { switchView(DOM.aiChoiceContainer, [DOM.menuContainer]); updateVideoBackground('aiChoice'); }
-    function goBackToMenu() { switchView(DOM.menuContainer, [DOM.resultContainer]); updateVideoBackground('menu'); }
-    function showModal(modal) { modal.classList.remove('hidden'); }
-    function hideModal(modal) { modal.classList.add('hidden'); }
-    function preloadImages() { gameData.forEach(game => { const img = new Image(); img.src = game.image; }); }
+    function goBackToMenu() { switchView(DOM.menuContainer, [DOM.resultContainer, DOM.gameSelectionContainer]); updateVideoBackground('menu'); }
     
-    function startCinematicIntro() {
-        const line1 = document.getElementById('introLine1'), line2 = document.getElementById('introLine2'), line3 = document.getElementById('introLine3'), overlay = DOM.cinematicIntro;
-        setTimeout(() => { line1.classList.add('visible'); }, 500);
-        setTimeout(() => { line1.classList.remove('visible'); line2.classList.add('visible'); }, 2500);
-        setTimeout(() => { line2.classList.remove('visible'); line3.classList.add('visible'); }, 4500);
-        setTimeout(() => { overlay.style.opacity = '0'; switchView(DOM.loginScreen, []); updateVideoBackground('login'); setTimeout(() => overlay.classList.add('hidden'), 1000); }, 6500);
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+    
+    async function startCinematicIntro() {
+        const overlay = DOM.cinematicIntro;
+        const lines = [document.getElementById('introLine1'), document.getElementById('introLine2'), document.getElementById('introLine3')];
+        const endIntro = () => {
+            if (introHasEnded) return;
+            introHasEnded = true;
+            overlay.style.opacity = '0';
+            setScreenVisibility(DOM.loginScreen);
+            updateVideoBackground('login');
+            setTimeout(() => { overlay.classList.add('hidden'); }, 1000);
+        };
+        overlay.addEventListener('click', endIntro, { once: true });
+        await sleep(500); if(introHasEnded) return; lines[0].classList.add('visible');
+        await sleep(2000); if(introHasEnded) return; lines[0].classList.remove('visible');
+        await sleep(500); if(introHasEnded) return; lines[1].classList.add('visible');
+        await sleep(2000); if(introHasEnded) return; lines[1].classList.remove('visible');
+        await sleep(500); if(introHasEnded) return; lines[2].classList.add('visible');
+        await sleep(2000); if(introHasEnded) return;
+        endIntro();
     }
 
     function showInactivityWarning() { showModal(DOM.modals.inactivity); }
-    function resetInactivityTimer() {
-        clearTimeout(inactivityTimer);
-        inactivityTimer = setTimeout(showInactivityWarning, 15 * 60 * 1000);
-    }
+    function resetInactivityTimer() { clearTimeout(inactivityTimer); inactivityTimer = setTimeout(showInactivityWarning, 15 * 60 * 1000); }
 
     document.addEventListener('DOMContentLoaded', () => {
-        preloadImages();
         startCinematicIntro();
-
+        document.querySelectorAll('button, .choice-card, .game-btn').forEach(el => el.addEventListener('click', () => playSound('click')));
         document.getElementById('calculateFinanceBtn').addEventListener('click', calculateAndDisplayFinance);
         document.getElementById('choiceAILongBao').addEventListener('click', () => selectAI('base'));
-        document.getElementById('choiceAILongBao4').addEventListener('click', () => showModal(DOM.modals.code));
-
+        document.getElementById('choiceAILongBao4').addEventListener('click', () => { playSound('click'); showModal(DOM.modals.code); });
         document.getElementById('submitGen4CodeBtn').addEventListener('click', () => {
             const codeInput = document.getElementById('gen4CodeInput'), codeError = document.getElementById('codeError');
-            if (gen4Codes.includes(codeInput.value.trim().toUpperCase())) {
-                hideModal(DOM.modals.code);
-                selectAI('gen4');
-                codeInput.value = '';
-                codeError.textContent = '';
-            } else {
-                codeError.textContent = 'Mã không hợp lệ!';
-            }
+            if (gen4Codes.includes(codeInput.value.trim().toUpperCase())) { hideModal(DOM.modals.code); selectAI('gen4'); codeInput.value = ''; codeError.textContent = ''; } else { codeError.textContent = 'Mã không hợp lệ!'; }
         });
-
         document.getElementById('closeCodeModalBtn').addEventListener('click', () => hideModal(DOM.modals.code));
-        document.getElementById('startScanBtn').addEventListener('click', startScan);
+        document.getElementById('autoScanBtn').addEventListener('click', startAutoScan);
+        document.getElementById('startAnalysisBtn').addEventListener('click', showGameSelection);
+        document.getElementById('historyBtn').addEventListener('click', displayScanHistory);
         document.getElementById('securityCheckBtn').addEventListener('click', runSecurityCheck);
-        document.getElementById('capitalPreserveBtn').addEventListener('click', () => showModal(DOM.modals.capital));
+        document.getElementById('capitalPreserveBtn').addEventListener('click', () => { playSound('click'); showModal(DOM.modals.capital); });
         document.getElementById('backToChoiceBtn').addEventListener('click', goBackToChoices);
         document.getElementById('backToMenuBtn').addEventListener('click', goBackToMenu);
-        document.getElementById('closeSecurityModalBtn').addEventListener('click', () => hideModal(DOM.modals.security));
+        document.getElementById('backToMenuFromGameSelectBtn').addEventListener('click', goBackToMenu);
+        document.getElementById('closeSecurityModalBtn').addEventListener('click', () => { hideModal(DOM.modals.security); stopSound('scan'); });
         document.getElementById('closeWarningModalBtn').addEventListener('click', () => hideModal(DOM.modals.capital));
-        Object.values(DOM.modals).forEach(modal => { if(modal.id !== 'inactivityWarningModal') { modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(modal); }); } });
-
-        window.onload = resetInactivityTimer;
-        document.onmousemove = resetInactivityTimer;
-        document.onmousedown = resetInactivityTimer;
-        document.ontouchstart = resetInactivityTimer;
-        document.onkeypress = resetInactivityTimer;
+        document.getElementById('closeHistoryModalBtn').addEventListener('click', () => hideModal(DOM.modals.history));
+        Object.values(DOM.modals).forEach(modal => { if(modal.id !== 'inactivityWarningModal') { modal.addEventListener('click', (e) => { if (e.target === modal) { hideModal(modal); stopSound('scan'); } }); } });
+        ['mousemove', 'mousedown', 'touchstart', 'keypress'].forEach(evt => document.addEventListener(evt, resetInactivityTimer, false));
     });
 </script>
 </body>
