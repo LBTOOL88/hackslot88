@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>HACK GAME SLOT - A.I LONG BẢO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #00ff7f;
+            --bright-green-glow: rgba(0, 255, 127, 1);
+            --text-light: #f0f0f0;
+            --bg-dark-theme: #0d1117;
+            --container-bg: rgba(22, 27, 34, 0.9);
+            --input-bg: #161b22;
+            --border-color: rgba(0, 255, 127, 0.25);
+            --border-focus-color: var(--primary-green);
+            --button-radius: 8px;
+            --container-radius: 12px;
+            --shadow-color-medium: rgba(0, 255, 127, 0.3);
+            --error-red: #ff4757;
+            --gradient-bg: linear-gradient(45deg, #0d1117, #161b22);
+            --ai-base-color: #2980b9;
+            --ai-gen4-color: #e67e22;
+        }
+
+        html, body {
+            margin: 0; padding: 0; height: 100%;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: var(--bg-dark-theme);
+            color: var(--text-light);
+            overflow: hidden;
+        }
+
+        .hidden { display: none !important; }
+        .orbitron-font { font-family: 'Orbitron', sans-serif; }
+        canvas#matrix { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.6; }
+
+        /* --- Cinematic Intro --- */
+        #cinematicIntroOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            opacity: 1;
+            transition: opacity 1.5s ease-out, visibility 1.5s ease-out;
+            visibility: visible;
+        }
+        #introText {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.5em, 5vw, 2.5em);
+            color: var(--primary-green);
+            text-align: center;
+            padding: 20px;
+            text-shadow: 0 0 15px var(--primary-green), 0 0 25px var(--bright-green-glow);
+            opacity: 0;
+            animation: revealText 3s ease-out forwards;
+            animation-delay: 0.5s;
+        }
+        @keyframes revealText {
+            0% { opacity: 0; letter-spacing: -10px; transform: scale(0.8); }
+            70% { opacity: 1; letter-spacing: 5px; transform: scale(1.1); }
+            100% { opacity: 1; letter-spacing: 2px; transform: scale(1); }
+        }
+
+        .intro {
+            position: fixed; width: 100%; height: 100%; background: var(--gradient-bg);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 20; padding: 20px; box-sizing: border-box;
+        }
+        #loginLogo {
+            max-width: 120px; margin-bottom: 25px; border-radius: 50%;
+            box-shadow: 0 0 15px var(--primary-green), 0 0 25px var(--bright-green-glow);
+            border: 2px solid var(--border-color);
+        }
+        .intro h2 {
+            color: var(--primary-green); text-shadow: 0 0 10px var(--bright-green-glow);
+            margin-bottom: 35px; font-size: 2.2em; text-align: center;
+        }
+        .intro input, .modal-content input[type="text"] {
+            padding: 14px 20px; margin: 10px 0; width: 90%; max-width: 300px;
+            border-radius: var(--button-radius); border: 1px solid var(--border-color);
+            background: var(--input-bg); color: var(--text-light); font-size: 1em;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        .intro input:focus, .modal-content input[type="text"]:focus { outline: none; border-color: var(--border-focus-color); box-shadow: 0 0 10px var(--bright-green-glow); }
+        .intro button {
+            padding: 14px 30px; background: linear-gradient(to right, #00b09b, #96c93d);
+            color: white; border: none; font-weight: bold; border-radius: var(--button-radius);
+            margin-top: 25px; cursor: pointer; font-size: 1.1em; text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 255, 127, 0.2); transition: all 0.2s;
+        }
+        .intro button:hover { box-shadow: 0 6px 20px var(--shadow-color-medium); transform: translateY(-3px); }
+        #error { color: var(--error-red); margin-top: 20px; font-weight: bold; }
+
+        #app { z-index: 5; width: 100vw; height: 100vh; box-sizing: border-box; position: relative; overflow-y: auto; }
+        header {
+            background-color: rgba(22, 27, 34, 0.95); padding: 15px; text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        header h1 {
+            color: var(--primary-green); text-shadow: 0 0 10px var(--bright-green-glow);
+            margin: 0; font-size: 1.8em; letter-spacing: 1px;
+        }
+        .main {
+            padding: 20px; max-width: 580px; margin: 20px auto;
+            background-color: var(--container-bg); border-radius: var(--container-radius);
+            border: 1px solid var(--border-color); box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+        }
+
+        #aiChoiceContainer { display: flex; flex-direction: column; gap: 20px; }
+        .choice-card {
+            border: 1px solid;
+            border-radius: var(--container-radius); padding: 25px; text-align: center;
+            cursor: pointer; transition: all 0.3s ease-in-out;
+        }
+        #choiceAILongBao { border-color: var(--ai-base-color); background: radial-gradient(circle, rgba(41, 128, 185, 0.3) 0%, rgba(41, 128, 185, 0.1) 70%); }
+        #choiceAILongBao4 { border-color: var(--ai-gen4-color); background: radial-gradient(circle, rgba(230, 126, 34, 0.3) 0%, rgba(230, 126, 34, 0.1) 70%); }
+        .choice-card:hover { transform: translateY(-5px); box-shadow: 0 0 15px var(--shadow-color-medium); border-color: var(--bright-green-glow); }
+        .choice-card h3 { margin-top: 0; color: var(--primary-green); font-size: 1.5em; }
+        .choice-card p { color: var(--text-light); }
+
+        #menuContainer { display: flex; flex-direction: column; gap: 15px; }
+        .menu-btn, .back-btn {
+            width: 100%; padding: 16px; font-size: 1.1em; color: white;
+            border: none; border-radius: var(--button-radius); font-weight: bold;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.2); transition: all 0.2s ease-out;
+            box-sizing: border-box;
+        }
+        .menu-btn:hover, .back-btn:hover { transform: translateY(-2px) scale(1.01); }
+        #startScanBtn { background: linear-gradient(to right, #11998e, #38ef7d); }
+        #securityCheckBtn { background: linear-gradient(to right, #4a90e2, #63a4ff); }
+        #capitalPreserveBtn { background: linear-gradient(to right, #f5a623, #f8b74b); }
+        .back-btn { margin-top: 20px; background: linear-gradient(to right, #6c5ce7, #8e44ad); }
+
+        #scanningContainer { text-align: center; }
+        #scanningContainer h3 { color: var(--primary-green); margin-bottom: 15px; font-size: 1.3em; }
+        #loadingGif { display: block; margin: 15px auto; max-width: 150px; border-radius: 8px; }
+        .popup-progress-bar-container { width: 100%; height: 10px; background-color: #2c3e50; border-radius: 5px; overflow: hidden; margin-top: 15px; }
+        .popup-progress-bar { height: 100%; background: linear-gradient(90deg, #11998e, #38ef7d); border-radius: 5px; }
+
+        #resultContainer h2 { text-align: center; margin-bottom: 15px; color: var(--primary-green); text-shadow: 0 0 8px var(--bright-green-glow); font-size: 1.6em; }
+        .result-stats { background-color: rgba(0, 255, 127, 0.05); border: 1px solid var(--border-color); border-radius: var(--button-radius); padding: 15px; margin-top: 15px; text-align: center; }
+        .result-stats p { font-size: 1.1em; color: var(--text-light); margin: 10px 0; }
+        .result-stats p strong { color: var(--primary-green); }
+        #financeManager { margin-top: 20px; padding: 15px; border: 1px solid var(--border-color); border-radius: var(--container-radius); background-color: rgba(0,0,0,0.15); }
+        #financeManager h3 { color: var(--primary-green); text-align: center; margin-top: 0; text-transform: uppercase; font-size: 1em; }
+        #financeManager input { width: 100%; box-sizing: border-box; display: block; margin: 10px auto; padding: 10px 15px; font-size: 1em; }
+        #financeManager button { display: block; width: 100%; padding: 12px; margin-top: 8px; background: linear-gradient(to right, #11998e, #38ef7d); color: white; font-size: 1em; }
+        #betResult { margin-top: 10px; text-align: center; font-size: 1.1em; font-weight: bold; min-height: 1.2em; }
+        
+        #goldenTimeContainer { background: linear-gradient(45deg, #ffc107, #ff9800); color: var(--bg-dark-theme); padding: 15px; border-radius: var(--container-radius); margin-top: 20px; text-align: center; border: 2px solid #ffeb3b; box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); animation: pulse 2s infinite alternate; }
+        #goldenTimeContainer h3 { margin: 0 0 10px 0; color: var(--bg-dark-theme); text-shadow: 1px 1px 2px rgba(0,0,0,0.2); font-size: 1.3em; }
+        #goldenTime { font-size: 1.5em; font-weight: bold; display: block; }
+        @keyframes pulse { from { transform: scale(1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); } to { transform: scale(1.03); box-shadow: 0 0 25px rgba(255, 215, 0, 1); } }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 9000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease-out; }
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+        .modal-content { background-color: var(--input-bg); padding: 30px; border-radius: var(--container-radius); border: 1px solid var(--border-color); box-shadow: 0 5px 20px var(--shadow-color-medium), 0 0 10px var(--bright-green-glow); text-align: center; width: 85%; max-width: 480px; }
+        .modal-content h2 { color: var(--primary-green); margin-top: 0; margin-bottom: 20px; font-size: 1.4em; }
+        .modal-content button { padding: 10px 20px; margin-top: 10px; background-color: #718096; color: var(--text-light); border: none; border-radius: var(--button-radius); font-weight: bold; cursor: pointer; font-size: 0.9em; text-transform: uppercase; }
+        .modal-content button.confirm-btn { background-color: #00b09b; }
+        #securityCheckText { display: flex; flex-direction: column; align-items: center; }
+        .security-loader { border: 8px solid rgba(0, 255, 127, 0.2); border-top: 8px solid var(--primary-green); border-radius: 50%; width: 60px; height: 60px; animation: spin 2s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #securityMessage { margin: 6px 0; font-size: 1em; color: var(--primary-green); text-align: center; }
+        #capitalWarningText { font-size: 1.1em; color: #f5a623; text-shadow: 0 0 6px #f5a623; font-weight: bold; line-height: 1.4; }
+        #codeError { color: var(--error-red); min-height: 1.2em; margin-top: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div id="cinematicIntroOverlay">
+    <h1 id="introText" class="orbitron-font"></h1>
+</div>
+
+<canvas id="matrix"></canvas>
+
+<div class="intro" id="loginScreen">
+    <img src="https://i.ibb.co/TBTkX4PT/photo-2025-05-31-22-38-07.jpg" alt="Logo" id="loginLogo">
+    <h2 class="orbitron-font">ĐĂNG NHẬP HỆ THỐNG</h2>
+    <input type="text" id="username" placeholder="Tên tài khoản" />
+    <input type="text" id="loginCode" placeholder="Mã truy cập" />
+    <button onclick="checkLoginCode()">Xác nhận</button>
+    <p id="error"></p>
+</div>
+
+<div id="app" class="hidden">
+    <header>
+        <h1 class="orbitron-font">A.I LONG BẢO</h1>
+    </header>
+    <div class="main">
+        <div id="aiChoiceContainer">
+            <div class="choice-card" id="choiceAILongBao">
+                <h3 class="orbitron-font">A.I LONG BẢO</h3>
+                <p>Phiên bản cơ bản</p>
+            </div>
+            <div class="choice-card" id="choiceAILongBao4">
+                <h3 class="orbitron-font">A.I LONG BẢO THẾ HỆ 4</h3>
+                <p>Phiên bản nâng cao (yêu cầu mã)</p>
+            </div>
+        </div>
+        
+        <div id="menuContainer" class="hidden">
+            <button class="menu-btn orbitron-font" id="startScanBtn">Quét Lỗ Hổng</button>
+            <button class="menu-btn orbitron-font" id="securityCheckBtn">Kiểm Tra Bảo Mật</button>
+            <button class="menu-btn orbitron-font" id="capitalPreserveBtn">Bảo Toàn Vốn</button>
+            <button class="back-btn orbitron-font" id="backToChoiceBtn">Quay Lại Chọn A.I</button>
+        </div>
+
+        <div id="scanningContainer" class="hidden">
+            <h3 class="orbitron-font">ĐANG QUÉT LỖ HỔNG...</h3>
+            <img src="" alt="Scanning..." id="loadingGif">
+            <p id="scanningText"></p>
+            <div class="popup-progress-bar-container"><div class="popup-progress-bar" id="scanProgressBar"></div></div>
+        </div>
+
+        <div id="resultContainer" class="hidden">
+            <h2 class="orbitron-font" id="gameName"></h2>
+            <img id="gameImage" src="" alt="Game Image" style="width: 100%; max-width: 200px; margin: 0 auto 15px; display: block; border-radius: 8px;">
+            <div class="result-stats">
+                <p><strong>TỈ LỆ THẮNG:</strong> <span id="winRate"></span></p>
+                <p><strong>SỐ VÒNG XOAY:</strong> <span id="spinCount"></span></p>
+                <p><strong>TỈ LỆ RƠI SCATER:</strong> <span id="scatterRate"></span></p>
+            </div>
+            <div id="goldenTimeContainer">
+                <h3 class="orbitron-font">🌟 KHUNG GIỜ VÀNG 🌟</h3>
+                <span id="goldenTime"></span>
+            </div>
+            <div id="financeManager">
+                <h3 class="orbitron-font">CHỨC NĂNG PHÂN CHIA TÀI CHÍNH</h3>
+                <input type="number" id="capitalInput" placeholder="Nhập tổng vốn (ví dụ: 100 cho 100k)">
+                <button id="calculateBetBtn" class="orbitron-font">TÍNH TOÁN CƯỢC</button>
+                <p id="betResult"></p>
+            </div>
+            <button class="back-btn orbitron-font" id="backToMenuBtn">Quay Lại Menu</button>
+        </div>
+    </div>
+</div>
+
+<div id="codeEntryModal" class="modal-overlay">
+    <div class="modal-content">
+        <h2 class="orbitron-font">NHẬP MÃ KÍCH HOẠT</h2>
+        <input type="text" id="gen4CodeInput" placeholder="Mã A.I Thế Hệ 4...">
+        <button id="submitGen4CodeBtn" class="confirm-btn orbitron-font">Xác nhận</button>
+        <p id="codeError"></p>
+    </div>
+</div>
+<div id="securityCheckModal" class="modal-overlay">
+    <div class="modal-content">
+        <h2 class="orbitron-font">KIỂM TRA BẢO MẬT</h2>
+        <div id="securityCheckText">
+            <div class="security-loader"></div>
+            <p id="securityMessage">Đang kiểm tra...</p>
+        </div>
+        <button id="closeSecurityModalBtn" class="orbitron-font hidden">Đã Hiểu</button>
+    </div>
+</div>
+<div id="capitalWarningModal" class="modal-overlay">
+    <div class="modal-content">
+        <h2 class="orbitron-font">CẢNH BÁO</h2>
+        <p id="capitalWarningText">VUI LÒNG NẠP TRÊN 2TR ĐỂ KÍCH HOẠT HOẶC LIÊN HỆ @LONGBAOF168</p>
+        <button id="closeWarningModalBtn" class="orbitron-font">Đóng</button>
+    </div>
+</div>
+
+<script>
+    const validLoginCodes = ["167904", "582173", "907348", "213560", "638901", "475289", "801452", "026815", "749063", "350728"];
+    const gen4Codes = ["LB4-98A1", "LB4-33B7", "LB4-C45D", "LB4-E6F2", "LB4-770A", "LB4-B81C", "LB4-D29E", "LB4-F333", "LB4-84G5", "LB4-H6I9"];
+    let chosenAI = null;
+
+    const loginScreenElement = document.getElementById('loginScreen');
+    const appScreen = document.getElementById('app');
+    const aiChoiceContainer = document.getElementById('aiChoiceContainer');
+    const menuContainer = document.getElementById('menuContainer');
+    const scanningContainer = document.getElementById('scanningContainer');
+    const resultContainer = document.getElementById('resultContainer');
+    const codeEntryModal = document.getElementById('codeEntryModal');
+    const securityCheckModal = document.getElementById('securityCheckModal');
+    const capitalWarningModal = document.getElementById('capitalWarningModal');
+    const goldenTimeElement = document.getElementById('goldenTime');
+    const loadingGifElement = document.getElementById('loadingGif');
+    const gameData = [
+        { name: 'ĐƯỜNG MẠT CHƯỢC 2', image: 'https://i.ibb.co/1nC3kGz/DUONG-MAT-CHUOC-2.jpg' },
+        { name: 'ĐƯỜNG MẠT CHƯỢT', image: 'https://i.ibb.co/QcYvB8R/DUONG-MAT-CHUOT.jpg' },
+        { name: 'GANESHA VÀNG', image: 'https://i.ibb.co/MfZdM2s/GANESHA-VANG.png' },
+        { name: 'ALIBABA', image: 'https://i.ibb.co/wZyZj0PP/ALIBABA.jpg' },
+        { name: 'BÓ THÁCH 2', image: 'https://i.ibb.co/5ggDhMk8/B-O-TH-CH-2.jpg' },
+        { name: 'QUYỀN VƯƠNG', image: 'https://i.ibb.co/ksykFv2c/QUY-N-V-NG.jpg' },
+        { name: 'SIN CITY', image: 'https://i.ibb.co/YCfcC9Z/SINCITY.jpg' },
+        { name: 'SUPER ACE', image: 'https://i.ibb.co/d0YbHwHx/SUPER-ACE.jpg' },
+        { name: 'THÀNH PHỐ VÀNG', image: 'https://i.ibb.co/qFkyp4X8/TH-NH-PH-V-NG.jpg' },
+        { name: 'TRÂU HÚC', image: 'https://i.ibb.co/chFtdXZJ/TR-U-H-C.jpg' },
+        { name: 'BA CON HEO NHỎ', image: 'https://i.ibb.co/WpYPwxQM/BA-CON-HEO-NH.jpg' },
+        { name: 'BÃO KỊCH NGON NGỌT', image: 'https://i.ibb.co/v4cCnS7D/B-O-K-CH-NG-NG-T.jpg' },
+        { name: 'BÃO KIM TIỀN', image: 'https://i.ibb.co/CKDRFvpW/B-O-KIM-TI-N.jpg' },
+        { name: 'CUỒNG NỘ MÈO', image: 'https://i.ibb.co/GvKMpLM3/CU-I-N-M.jpg' },
+        { name: 'THẦN TÀI GIÁ ĐÁO', image: 'https://i.ibb.co/JjpBKvLb/default-4.jpg' },
+        { name: 'JOKER', image: 'https://i.ibb.co/MDSDyGy4/JOKER.jpg' },
+        { name: 'NỮ HOÀNG INCA', image: 'https://i.ibb.co/gbP1wPRd/N-HO-NG-INCA.jpg' },
+        { name: 'LỄ HỘI BIA', image: 'https://i.ibb.co/SwfN1fkF/U-B-P-B-N.jpg' },
+        { name: 'KHU TIỀN MẶT 777', image: 'https://i.ibb.co/SwFMGG9B/KHU-TI-N-M-T-777.jpg' },
+        { name: 'NOEL BIG BANG', image: 'https://i.ibb.co/KxpdtWmM/NOEL-BIG-BANG.jpg' },
+        { name: 'NGÀY TẬN THẾ', image: 'https://i.ibb.co/3yQhM2yP/NG-Y-T-N-TH.jpg' },
+        { name: 'NHIỆM VỤ BERMUDA', image: 'https://i.ibb.co/sJpYDrwW/NHI-M-V-BERMUDA.jpg' },
+        { name: 'RACING BULL', image: 'https://i.ibb.co/GQk7PqHy/RACING-BULL.jpg' },
+        { name: 'RISE OF SAMURAI 4', image: 'https://i.ibb.co/0RkVdtyN/RISE-OF-SAMURAI-4.jpg' },
+        { name: 'SUGAR RUSH 1000', image: 'https://i.ibb.co/pBQBQf4p/SUGAR-RUSH-1000.jpg' },
+        { name: 'TIK TAC TAK', image: 'https://i.ibb.co/Z6CKd4p0/TIK-TAC-TAK.jpg' },
+        { name: 'VẬN MAY GIZA', image: 'https://i.ibb.co/bMdmX1jJ/V-N-MAY-GIZA.jpg' },
+        { name: 'KỲ LÂN MẠ VÀNG', image: 'https://i.ibb.co/bgHJX2KF/K-L-N-M-CH-N-C.jpg' },
+        { name: 'KHO BÁU AZTEC', image: 'https://i.ibb.co/svmqyS8w/KHO-B-U-AZTEC.jpg' },
+        { name: 'MEDUSA 1 LỜI NGUYỀN', image: 'https://i.ibb.co/2Yp7tFM5/MEDUSA-1-L-I-NGUY-N.jpg' },
+        { name: 'MEDUSA', image: 'https://i.ibb.co/CxGCvpj/MEDUSA.jpg' },
+        { name: 'NEKO MAY MẮN', image: 'https://i.ibb.co/LhR66cdN/NEKO-MAY-M-N.jpg' },
+        { name: 'NỮ HOÀNG TIỀN THƯỞNG', image: 'https://i.ibb.co/HfVDd0d0/N-HO-NG-TI-N-TH-NG.jpg' },
+        { name: 'QUỶ TỬ CHIẾN TIỀN THƯỞNG', image: 'https://i.ibb.co/bRvz916R/QUY-T-CHI-N-TI-N-TH-NG.jpg' },
+        { name: 'THỎ MAY MẮN', image: 'https://i.ibb.co/m5YmCHBP/TH-MAY-M-N.jpg' },
+        { name: 'VUA CÔNG LONG', image: 'https://i.ibb.co/DgVsH0H5/VUA-C-NG-LONG.jpg' },
+        { name: 'WILD OTTER', image: 'https://i.ibb.co/PLYZBZK/WILD-O-T-C.jpg' },
+        { name: 'ZOMBIE BREAKER', image: 'https://i.ibb.co/DgK5ghT0/ZOMBIE-BREAKER.jpg' }
+    ];
+
+    function checkLoginCode() {
+        const codeInput = document.getElementById("loginCode");
+        const usernameInput = document.getElementById("username");
+        const error = document.getElementById("error");
+        if (!usernameInput.value.trim()) { error.textContent = "Vui lòng nhập Tên tài khoản!"; return; }
+        if (!codeInput.value.trim()) { error.textContent = "Vui lòng nhập Mã truy cập!"; return; }
+        if (validLoginCodes.includes(codeInput.value.trim())) {
+            appScreen.style.overflowY = 'auto';
+            loginScreenElement.classList.add("hidden");
+            appScreen.classList.remove("hidden");
+            error.textContent = "";
+        } else { error.textContent = "Mã truy cập hoặc Tên tài khoản không hợp lệ!"; }
+    }
+
+    function selectAI(type) {
+        chosenAI = type;
+        aiChoiceContainer.classList.add('hidden');
+        menuContainer.classList.remove('hidden');
+    }
+
+    function startScan() {
+        menuContainer.classList.add('hidden');
+        scanningContainer.classList.remove('hidden');
+
+        if (chosenAI === 'gen4') {
+            loadingGifElement.src = 'https://i.ibb.co/jkJQmW0X/222222.gif';
+        } else {
+            loadingGifElement.src = 'https://i.ibb.co/nsw6D7cw/Art-Animation-GIF-by-xponentialdesign.gif';
+        }
+
+        const scanProgressBar = document.getElementById('scanProgressBar');
+        scanProgressBar.style.transition = 'none';
+        scanProgressBar.style.width = '0%';
+        void scanProgressBar.offsetWidth;
+        scanProgressBar.style.transition = 'width 5s linear';
+        scanProgressBar.style.width = '100%';
+        setTimeout(showResults, 5000);
+    }
+
+    function formatTime(date) {
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        return `${hours}h${minutes}`;
+    }
+
+    function showResults() {
+        scanningContainer.classList.add('hidden');
+        resultContainer.classList.remove('hidden');
+
+        const selectedGame = gameData[Math.floor(Math.random() * gameData.length)];
+        const winRate = (Math.random() * (98.5 - 70) + 70).toFixed(2) + '%';
+        const spinCount = Math.floor(Math.random() * (300 - 100 + 1)) + 100;
+        const scatterRate = (Math.random() * (90 - 50) + 50).toFixed(2) + '%';
+        const now = new Date();
+        const startTime = new Date(now.getTime() + 15 * 60000);
+        const endTime = new Date(startTime.getTime() + 30 * 60000);
+        goldenTimeElement.textContent = `${formatTime(startTime)} - ${formatTime(endTime)}`;
+
+        document.getElementById('gameName').textContent = "KẾT QUẢ: " + selectedGame.name;
+        document.getElementById('gameImage').src = selectedGame.image;
+        document.getElementById('winRate').textContent = winRate;
+        document.getElementById('spinCount').textContent = spinCount + " vòng";
+        document.getElementById('scatterRate').textContent = scatterRate;
+        document.getElementById('betResult').textContent = "";
+        document.getElementById('capitalInput').value = "";
+    }
+
+    function showSecurityCheck() {
+        const securityMessage = document.getElementById('securityMessage');
+        const closeButton = document.getElementById('closeSecurityModalBtn');
+
+        const messages = [ 'ĐANG KIỂM TRA TÀI KHOẢN CỦA BẠN...', 'KIỂM TRA TRÙNG THIẾT BỊ...', 'KIỂM TRA TRÙNG IP...', 'ĐÃ XOÁ LỊCH SỬ CHƠI....', 'ĐANG XOÁ IP...', 'ĐANG KHÔI PHỤC IP...', 'ĐÃ THÊM IP MỚI 101.200.1.3', 'ĐANG KHÔI PHỤC TÀI KHOẢN GAME..', 'ĐÃ LOẠI BỎ THEO DÕI TỪ NHÀ CÁI....', 'HỆ THỐNG AN TOÀN. HÃY VÔ GAME !!' ];
+        
+        securityMessage.textContent = 'Đang khởi tạo...';
+        closeButton.classList.add('hidden');
+        securityCheckModal.classList.add('visible');
+        
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < messages.length) {
+                securityMessage.textContent = messages[i];
+                i++;
+            } else {
+                clearInterval(interval);
+                securityMessage.style.color = '#2ecc71';
+                closeButton.classList.remove('hidden');
+            }
+        }, 800);
+    }
+    
+    function calculateBet() {
+        const capitalInput = document.getElementById('capitalInput');
+        const betResult = document.getElementById('betResult');
+        const capital = parseFloat(capitalInput.value);
+        if (isNaN(capital) || capital <= 0) {
+            betResult.textContent = "Vui lòng nhập số vốn hợp lệ.";
+            betResult.style.color = "var(--error-red)";
+            return;
+        }
+        const randomPercent = Math.random() < 0.5 ? 0.01 : 0.02;
+        const suggestedBet = capital * randomPercent;
+        betResult.textContent = `Mức cược đề xuất (${randomPercent*100}%): ${suggestedBet.toFixed(2)}`;
+        betResult.style.color = "var(--primary-green)";
+    }
+
+    function goBackToChoices() {
+        menuContainer.classList.add('hidden');
+        aiChoiceContainer.classList.remove('hidden');
+    }
+    
+    function goBackToMenu() {
+        resultContainer.classList.add('hidden');
+        menuContainer.classList.remove('hidden');
+    }
+
+    function initializeMatrix() {
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const letters = '01';
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+        for (let x = 0; x < columns; x++) drops[x] = 1;
+
+        function draw() {
+            ctx.fillStyle = 'rgba(13, 17, 23, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(0, 255, 127, 0.7)';
+            ctx.font = fontSize + 'px arial';
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(draw, 33);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const introOverlay = document.getElementById('cinematicIntroOverlay');
+        document.getElementById('introText').textContent = "LÀ A.I THÔNG MINH NHẤT CHƠI NỔ HŨ";
+        setTimeout(() => {
+            introOverlay.style.opacity = '0';
+            introOverlay.style.visibility = 'hidden';
+        }, 5000);
+        
+        initializeMatrix();
+
+        document.getElementById('choiceAILongBao').addEventListener('click', () => selectAI('base'));
+        document.getElementById('choiceAILongBao4').addEventListener('click', () => {
+            document.getElementById('codeError').textContent = '';
+            codeEntryModal.classList.add('visible');
+        });
+        
+        document.getElementById('submitGen4CodeBtn').addEventListener('click', () => {
+            const codeInput = document.getElementById('gen4CodeInput');
+            const errorP = document.getElementById('codeError');
+            if (gen4Codes.includes(codeInput.value.trim().toUpperCase())) {
+                codeEntryModal.classList.remove('visible');
+                codeInput.value = '';
+                errorP.textContent = '';
+                selectAI('gen4');
+            } else {
+                errorP.textContent = 'Mã không hợp lệ!';
+            }
+        });
+
+        document.getElementById('startScanBtn').addEventListener('click', startScan);
+        document.getElementById('securityCheckBtn').addEventListener('click', showSecurityCheck);
+        document.getElementById('capitalPreserveBtn').addEventListener('click', () => capitalWarningModal.classList.add('visible'));
+        document.getElementById('backToChoiceBtn').addEventListener('click', goBackToChoices);
+        
+        document.getElementById('calculateBetBtn').addEventListener('click', calculateBet);
+        document.getElementById('backToMenuBtn').addEventListener('click', goBackToMenu);
+        
+        document.getElementById('closeSecurityModalBtn').addEventListener('click', () => securityCheckModal.classList.remove('visible'));
+        document.getElementById('closeWarningModalBtn').addEventListener('click', () => capitalWarningModal.classList.remove('visible'));
+        codeEntryModal.addEventListener('click', (event) => { if (event.target === codeEntryModal) { codeEntryModal.classList.remove('visible'); } });
+    });
+</script>
+</body>
+</html>
