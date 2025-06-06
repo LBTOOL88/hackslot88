@@ -21,6 +21,15 @@
         @keyframes aurora-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.03); } }
         @keyframes online-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        /* === START: NEW ANIMATION FOR VIP CARD === */
+        @keyframes vip-glow {
+            0% { border-color: #00ff7f; box-shadow: 0 0 15px #00ff7f, inset 0 0 5px rgba(0, 255, 127, 0.5); }
+            25% { border-color: #00bfff; box-shadow: 0 0 20px #00bfff, inset 0 0 7px rgba(0, 191, 255, 0.5); }
+            50% { border-color: #ff00c1; box-shadow: 0 0 25px #ff00c1, inset 0 0 10px rgba(255, 0, 193, 0.5); }
+            75% { border-color: #ffb300; box-shadow: 0 0 20px #ffb300, inset 0 0 7px rgba(255, 179, 0, 0.5); }
+            100% { border-color: #00ff7f; box-shadow: 0 0 15px #00ff7f, inset 0 0 5px rgba(0, 255, 127, 0.5); }
+        }
+        /* === END: NEW ANIMATION FOR VIP CARD === */
 
         html, body { margin: 0; padding: 0; font-family: 'Roboto', Arial, sans-serif; background: var(--bg-dark-theme); color: var(--text-light); overflow-x: hidden; }
         .hidden { display: none !important; }
@@ -53,12 +62,80 @@
         input[type="text"], input[type="number"] { padding: 14px 20px; margin: 10px 0; width: 100%; max-width: 300px; border-radius: var(--button-radius); border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-light); font-size: 1em; box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); transition: all 0.3s; box-sizing: border-box; }
         input[type="text"]:focus, input[type="number"]:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 10px var(--primary-color); }
         .action-button { padding: 14px 30px; background: linear-gradient(45deg, #f093fb, #f5576c); color: white; border: none; font-weight: bold; border-radius: var(--button-radius); margin-top: 25px; cursor: pointer; font-size: 1.1em; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,0,0, 0.2); transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .action-button:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 10px 20px rgba(f5, 87, 108, 0.4); }
-        .choice-card, .menu-btn, .back-btn { border: 2px solid transparent; border-radius: var(--container-radius); padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease-in-out; background: rgba(22, 27, 34, 0.8); backdrop-filter: blur(5px); }
-        .choice-card:hover, .menu-btn:hover, .back-btn:hover { transform: translateY(-5px); border-color: var(--primary-color); background: rgba(35, 42, 53, 0.9); }
+        .action-button:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 10px 20px rgba(245, 87, 108, 0.4); }
+        .choice-card, .back-btn { border: 2px solid var(--border-color); border-radius: var(--container-radius); padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease-in-out; background: rgba(22, 27, 34, 0.8); backdrop-filter: blur(5px); }
+        .choice-card:hover, .back-btn:hover { transform: translateY(-5px); border-color: var(--primary-color); background: rgba(35, 42, 53, 0.9); }
+        
+        /* === START: VIP CARD STYLING === */
+        #choiceAILongBao4 {
+            border: 2px solid;
+            animation: vip-glow 6s linear infinite;
+        }
+        #choiceAILongBao4 h3 {
+             background: linear-gradient(90deg, #00bfff, #ff00c1, #ffb300, #00bfff);
+             background-size: 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: aurora-flow 6s linear infinite;
+        }
+         #choiceAILongBao4:hover {
+            transform: translateY(-8px) scale(1.03);
+        }
+        /* === END: VIP CARD STYLING === */
+
         .choice-card.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
         .choice-card h3 { margin-top: 0; font-size: 1.5em; }
-        .menu-btn, .back-btn { width: 100%; font-size: 1.1em; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; box-sizing: border-box; padding: 16px; }
+
+        /* === START: MENU BUTTON UPGRADE === */
+        .menu-btn {
+            width: 100%;
+            font-size: 1.1em;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-sizing: border-box;
+            padding: 16px;
+            border-radius: var(--container-radius);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0, 0.2);
+        }
+        .menu-btn:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 150%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-45deg);
+            transition: left 0.6s ease;
+        }
+        .menu-btn:hover:after {
+            left: 150%;
+        }
+        .menu-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0, 0.4);
+        }
+        /* Applying individual gradients */
+        .menu-btn:nth-of-type(1) { background-image: linear-gradient(45deg, #2980B9, #6DD5FA); } /* Jar Hunt */
+        .menu-btn:nth-of-type(2) { background-image: linear-gradient(45deg, #8E44AD, #C0392B); } /* Auto Scan */
+        .menu-btn:nth-of-type(3) { background-image: linear-gradient(45deg, #16A085, #F4D03F); } /* Analysis */
+        .menu-btn:nth-of-type(4) { background-image: linear-gradient(45deg, #D35400, #F39C12); } /* History */
+        .menu-btn:nth-of-type(5) { background-image: linear-gradient(45deg, #C0392B, #E74C3C); } /* Security */
+        .menu-btn:nth-of-type(6) { background-image: linear-gradient(45deg, #4b6cb7, #182848); } /* Capital Preserve */
+        .back-btn {
+             width: 100%; font-size: 1.1em; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; box-sizing: border-box; padding: 16px;
+             background-color: #495057;
+        }
+        /* === END: MENU BUTTON UPGRADE === */
+
         #error, #codeError { color: var(--error-red); margin-top: 20px; font-weight: bold; min-height: 1.2em; }
         
         #scanningContainer { text-align: center; }
