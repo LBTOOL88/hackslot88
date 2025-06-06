@@ -8,12 +8,13 @@
     <style>
         :root {
             --primary-color: #00ff7f; /* Green */
+            --vip-color: #ffc107; /* Gold for VIP */
             --text-light: #f0f0f0;
             --bg-dark-theme: #0d1117;
             --container-bg: rgba(13, 17, 23, 0.75);
             --input-bg: #161b22;
             --border-color: rgba(0, 255, 127, 0.25);
-            --button-radius: 10px;
+            --button-radius: 12px;
             --container-radius: 16px;
             --error-red: #ff4757;
             --aurora-speed: 5s;
@@ -21,7 +22,6 @@
         @keyframes aurora-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.03); } }
         @keyframes online-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        /* === START: NEW ANIMATION FOR VIP CARD === */
         @keyframes vip-glow {
             0% { border-color: #00ff7f; box-shadow: 0 0 15px #00ff7f, inset 0 0 5px rgba(0, 255, 127, 0.5); }
             25% { border-color: #00bfff; box-shadow: 0 0 20px #00bfff, inset 0 0 7px rgba(0, 191, 255, 0.5); }
@@ -29,7 +29,11 @@
             75% { border-color: #ffb300; box-shadow: 0 0 20px #ffb300, inset 0 0 7px rgba(255, 179, 0, 0.5); }
             100% { border-color: #00ff7f; box-shadow: 0 0 15px #00ff7f, inset 0 0 5px rgba(0, 255, 127, 0.5); }
         }
-        /* === END: NEW ANIMATION FOR VIP CARD === */
+        @keyframes vip-chat-glow {
+            0% { box-shadow: 0 0 15px var(--vip-color), inset 0 0 8px rgba(255, 193, 7, 0.6); border-color: var(--vip-color); }
+            50% { box-shadow: 0 0 25px #fff, inset 0 0 12px rgba(255, 255, 255, 0.8); border-color: #fff; }
+            100% { box-shadow: 0 0 15px var(--vip-color), inset 0 0 8px rgba(255, 193, 7, 0.6); border-color: var(--vip-color); }
+        }
 
         html, body { margin: 0; padding: 0; font-family: 'Roboto', Arial, sans-serif; background: var(--bg-dark-theme); color: var(--text-light); overflow-x: hidden; }
         .hidden { display: none !important; }
@@ -57,16 +61,107 @@
         #welcomeMessage { font-size: 1.1em; margin-bottom: 20px; }
 
         header { width: 100%; background-color: rgba(13, 17, 23, 0.8); padding: 15px; text-align: center; border-bottom: 2px solid var(--border-color); backdrop-filter: blur(10px); box-sizing: border-box; }
-        #aiChoiceContainer, #menuContainer, #scanningContainer, #resultContainer, #gameSelectionContainer { display: flex; flex-direction: column; gap: 20px; animation: fadeInUp 0.6s ease-out forwards; }
+        #aiChoiceContainer, #scanningContainer, #resultContainer, #gameSelectionContainer { display: flex; flex-direction: column; gap: 20px; animation: fadeInUp 0.6s ease-out forwards; }
+
+        /* === START: MENU INTERFACE UPGRADE === */
+        #menuContainer {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        .menu-btn {
+            background: transparent;
+            font-size: 1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-sizing: border-box;
+            padding: 12px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            text-align: center; /* Ensure text is centered if it wraps */
+        }
+        .menu-btn svg {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+        .menu-btn .menu-text {
+             font-size: 0.85em;
+             line-height: 1.2; /* Adjust line height for wrapped text */
+        }
+        .menu-btn:hover svg {
+            transform: scale(1.1);
+        }
+
+        /* --- Style for BASE Menu --- */
+        .menu-base .menu-btn {
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+        }
+        .menu-base .menu-btn:hover {
+            background: var(--primary-color);
+            color: var(--bg-dark-theme);
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
+        }
+
+        /* --- Style for VIP Menu --- */
+        .menu-vip .menu-btn {
+            color: var(--vip-color);
+            border: 1px solid var(--vip-color);
+        }
+        .menu-vip .menu-btn:hover {
+            background: var(--vip-color);
+            color: var(--bg-dark-theme);
+            transform: translateY(-5px);
+            border-color: var(--vip-color);
+            box-shadow: 0 0 10px var(--vip-color), 0 0 20px var(--vip-color);
+        }
+
+        /* --- Special Buttons --- */
+        #backToChoiceBtn {
+            grid-column: 1 / -1;
+            flex-direction: row;
+            background-color: transparent;
+            border: 1px solid #6c757d;
+            color: #6c757d;
+        }
+        #backToChoiceBtn:hover {
+            background: #6c757d;
+            color: var(--text-light);
+            border-color: #6c757d;
+            box-shadow: 0 0 10px #6c757d;
+        }
+        #backToChoiceBtn svg {
+            width: 24px; height: 24px; margin-bottom: 0; margin-right: 10px;
+        }
+        
+        #playWithAIBtn {
+            grid-column: 1 / -1;
+            border-width: 2px;
+            animation: vip-chat-glow 3s linear infinite;
+        }
+        /* === END: MENU INTERFACE UPGRADE === */
 
         input[type="text"], input[type="number"] { padding: 14px 20px; margin: 10px 0; width: 100%; max-width: 300px; border-radius: var(--button-radius); border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-light); font-size: 1em; box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); transition: all 0.3s; box-sizing: border-box; }
         input[type="text"]:focus, input[type="number"]:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 10px var(--primary-color); }
         .action-button { padding: 14px 30px; background: linear-gradient(45deg, #f093fb, #f5576c); color: white; border: none; font-weight: bold; border-radius: var(--button-radius); margin-top: 25px; cursor: pointer; font-size: 1.1em; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,0,0, 0.2); transition: all 0.3s ease; position: relative; overflow: hidden; }
         .action-button:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 10px 20px rgba(245, 87, 108, 0.4); }
-        .choice-card, .back-btn { border: 2px solid var(--border-color); border-radius: var(--container-radius); padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease-in-out; background: rgba(22, 27, 34, 0.8); backdrop-filter: blur(5px); }
-        .choice-card:hover, .back-btn:hover { transform: translateY(-5px); border-color: var(--primary-color); background: rgba(35, 42, 53, 0.9); }
         
-        /* === START: VIP CARD STYLING === */
+        .choice-card { border: 2px solid var(--border-color); border-radius: var(--container-radius); padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease-in-out; background: rgba(22, 27, 34, 0.8); backdrop-filter: blur(5px); }
+        .choice-card:hover { transform: translateY(-5px); border-color: var(--primary-color); background: rgba(35, 42, 53, 0.9); }
         #choiceAILongBao4 {
             border: 2px solid;
             animation: vip-glow 6s linear infinite;
@@ -82,59 +177,8 @@
          #choiceAILongBao4:hover {
             transform: translateY(-8px) scale(1.03);
         }
-        /* === END: VIP CARD STYLING === */
-
         .choice-card.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
         .choice-card h3 { margin-top: 0; font-size: 1.5em; }
-
-        /* === START: MENU BUTTON UPGRADE === */
-        .menu-btn {
-            width: 100%;
-            font-size: 1.1em;
-            color: white;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-sizing: border-box;
-            padding: 16px;
-            border-radius: var(--container-radius);
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            border: none;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0, 0.2);
-        }
-        .menu-btn:after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -150%;
-            width: 150%;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-45deg);
-            transition: left 0.6s ease;
-        }
-        .menu-btn:hover:after {
-            left: 150%;
-        }
-        .menu-btn:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 20px rgba(0,0,0, 0.4);
-        }
-        /* Applying individual gradients */
-        .menu-btn:nth-of-type(1) { background-image: linear-gradient(45deg, #2980B9, #6DD5FA); } /* Jar Hunt */
-        .menu-btn:nth-of-type(2) { background-image: linear-gradient(45deg, #8E44AD, #C0392B); } /* Auto Scan */
-        .menu-btn:nth-of-type(3) { background-image: linear-gradient(45deg, #16A085, #F4D03F); } /* Analysis */
-        .menu-btn:nth-of-type(4) { background-image: linear-gradient(45deg, #D35400, #F39C12); } /* History */
-        .menu-btn:nth-of-type(5) { background-image: linear-gradient(45deg, #C0392B, #E74C3C); } /* Security */
-        .menu-btn:nth-of-type(6) { background-image: linear-gradient(45deg, #4b6cb7, #182848); } /* Capital Preserve */
-        .back-btn {
-             width: 100%; font-size: 1.1em; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; box-sizing: border-box; padding: 16px;
-             background-color: #495057;
-        }
-        /* === END: MENU BUTTON UPGRADE === */
 
         #error, #codeError { color: var(--error-red); margin-top: 20px; font-weight: bold; min-height: 1.2em; }
         
@@ -216,26 +260,54 @@
     </header>
     <div class="main-content">
         <div id="settingsBtn">⚙️</div>
-        <div id="aiChoiceContainer">
+        <div id="aiChoiceContainer" class="hidden">
             <p id="welcomeMessage"></p>
             <div class="choice-card" id="choiceAILongBao"> <h3 class="orbitron-font">A.I LONG BẢO</h3> <p>Phiên bản cơ bản</p> </div>
             <div class="choice-card" id="choiceAILongBao4"> <h3 class="orbitron-font">A.I LONG BẢO THẾ HỆ 4</h3> <p>Phiên bản nâng cao (yêu cầu mã)</p> </div>
             <div class="choice-card disabled"> <h3 class="orbitron-font">A.I THẾ HỆ 5</h3> <p>(SẮP RA MẮT)</p> </div>
         </div>
+        
         <div id="menuContainer" class="hidden">
-            <div id="dynamicDashboard">
+            <div id="dynamicDashboard" style="grid-column: 1 / -1;">
                 <span>Trạng thái hệ thống: <span id="systemStatus"></span></span>
                 <span>Ping: <span id="networkPing"></span></span>
                 <span>A.I Hoạt động: <span id="activeAI"></span></span>
             </div>
-            <button class="menu-btn orbitron-font" id="jarHuntBtn">Chế Độ Săn Hũ</button>
-            <button class="menu-btn orbitron-font" id="autoScanBtn">Tự Động Quét</button>
-            <button class="menu-btn orbitron-font" id="startAnalysisBtn">Phân Tích Game</button>
-            <button class="menu-btn orbitron-font" id="historyBtn">Lịch sử quét</button>
-            <button class="menu-btn orbitron-font" id="securityCheckBtn">Kiểm Tra Bảo Mật</button>
-            <button class="menu-btn orbitron-font" id="capitalPreserveBtn">Bảo Toàn Vốn</button>
-            <button class="back-btn orbitron-font" id="backToChoiceBtn">Quay Lại Chọn A.I</button>
+
+            <button class="menu-btn orbitron-font" id="playWithAIBtn" onclick="if(typeof Tawk_API !== 'undefined' && Tawk_API.toggle){ Tawk_API.toggle(); } playSound('click'); return false;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-4H6V6h12v2z"/></svg>
+                <span class="menu-text">Chơi Cùng A.I</span>
+            </button>
+            <button class="menu-btn orbitron-font" id="jarHuntBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12h2v4h-2zm0 6h2v2h-2z"/></svg>
+                <span class="menu-text">Săn Hũ</span>
+            </button>
+            <button class="menu-btn orbitron-font" id="autoScanBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9c0-4.97-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/><path d="M16.24 7.76C15.07 6.59 13.54 6 12 6v6l4.24 4.24c2.34-2.34 2.34-6.14 0-8.48z" opacity=".3"/></svg>
+                <span class="menu-text">Tự Động Quét</span>
+            </button>
+            <button class="menu-btn orbitron-font" id="startAnalysisBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                <span class="menu-text">Phân Tích Game</span>
+            </button>
+            <button class="menu-btn orbitron-font" id="historyBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6a7 7 0 0 1 7-7 7 7 0 0 1 7 7 7 7 0 0 1-7 7v2a9 9 0 0 0 9-9c0-4.97-4.03-9-9-9z"/><path d="M12 8v5l4.25 2.52.75-1.23-3.5-2.07V8z"/></svg>
+                <span class="menu-text">Lịch sử</span>
+            </button>
+            <button class="menu-btn orbitron-font" id="securityCheckBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                <span class="menu-text">Bảo Mật</span>
+            </button>
+            <button class="menu-btn orbitron-font" id="capitalPreserveBtn">
+                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.9 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                <span class="menu-text">Bảo Toàn Vốn</span>
+            </button>
+            <button class="menu-btn orbitron-font" id="backToChoiceBtn">
+                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                 <span class="menu-text">Quay Lại</span>
+            </button>
         </div>
+
         <div id="gameSelectionContainer" class="hidden">
             <h3 class="orbitron-font">CHỌN GAME ĐỂ PHÂN TÍCH</h3>
             <div id="game-list"></div>
@@ -293,8 +365,7 @@
         <h2>NHẬP MÃ KÍCH HOẠT</h2>
         <input type="text" id="gen4CodeInput" placeholder="Mã A.I Thế Hệ 4...">
         <button id="submitGen4CodeBtn" class="action-button" style="padding: 10px 20px; font-size: 0.9em;">Xác nhận</button>
-        <button id="closeCodeModalBtn" class="back-btn" style="padding: 10px 20px; font-size: 0.9em; margin-top: 10px; background-color: #555;">Hủy</button>
-        <p id="codeError"></p>
+        <button id="closeCodeModalBtn" class="action-button" style="padding: 10px 20px; font-size: 0.9em; margin-top: 10px; background: #6c757d;">Hủy</button>
     </div>
 </div>
 <div id="securityCheckModal" class="modal-overlay hidden">
@@ -325,7 +396,17 @@
     </div>
 </div>
 
-
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/66425b7ddbadee190ffc208d/1it1jaote';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
 <script>
     // --- KHAI BÁO BIẾN TOÀN CỤC ---
     const validLoginCodes = ["167904", "582173", "907348", "213560", "638901", "475289", "801452", "026815", "749063", "350728"];
@@ -375,6 +456,25 @@
 
     function selectAI(type) {
         chosenAI = type;
+        
+        const jarHuntBtn = document.getElementById('jarHuntBtn');
+        const playWithAIBtn = document.getElementById('playWithAIBtn');
+        const menuContainer = document.getElementById('menuContainer');
+
+        if (type === 'gen4') {
+            // Apply VIP styles and show VIP buttons
+            menuContainer.classList.add('menu-vip');
+            menuContainer.classList.remove('menu-base');
+            jarHuntBtn.style.display = 'flex';
+            playWithAIBtn.style.display = 'flex';
+        } else { 
+            // Apply Base styles and hide VIP buttons
+            menuContainer.classList.add('menu-base');
+            menuContainer.classList.remove('menu-vip');
+            jarHuntBtn.style.display = 'none';
+            playWithAIBtn.style.display = 'none';
+        }
+
         switchView(DOM.menuContainer, [DOM.aiChoiceContainer]);
         updateVideoBackground('menu');
         startDashboard();
@@ -547,7 +647,12 @@
         switchView(DOM.aiChoiceContainer, [DOM.menuContainer]);
         updateVideoBackground('aiChoice');
     }
-    function goBackToMenu() { switchView(DOM.menuContainer, [DOM.resultContainer, DOM.gameSelectionContainer]); updateVideoBackground('menu'); startDashboard(); }
+
+    function goBackToMenu() { 
+        switchView(DOM.menuContainer, [DOM.resultContainer, DOM.gameSelectionContainer]); 
+        updateVideoBackground('menu'); 
+        startDashboard(); 
+    }
     
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     
@@ -582,8 +687,9 @@
         document.getElementById('soundToggle').addEventListener('change', (e) => { isSoundEnabled = e.target.checked; });
         document.querySelectorAll('.swatch').forEach(swatch => {
             swatch.addEventListener('click', (e) => {
-                document.documentElement.style.setProperty('--primary-color', e.target.dataset.color);
-                document.documentElement.style.setProperty('--border-color', e.target.dataset.color+'40');
+                const newColor = e.target.dataset.color;
+                document.documentElement.style.setProperty('--primary-color', newColor);
+                document.documentElement.style.setProperty('--border-color', newColor + '40'); // '40' adds alpha transparency
                 document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
                 e.target.classList.add('active');
             });
