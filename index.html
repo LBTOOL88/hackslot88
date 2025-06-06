@@ -53,6 +53,12 @@
         .form-container, .main-content { border: 2px solid var(--border-color); border-radius: var(--container-radius); padding: 30px 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); animation: fadeInUp 0.8s ease-out; text-align: center; }
         .form-container { background: rgba(13, 17, 23, 0.45); backdrop-filter: none; -webkit-backdrop-filter: none; }
         .main-content { position: relative; background: var(--container-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); max-width: 620px; }
+        
+        /* NEW VIP Background color */
+        .main-content.vip-mode {
+             --border-color: rgba(255, 193, 7, 0.5);
+             background: rgba(20, 15, 0, 0.75);
+        }
 
         #loginLogo { max-width: 120px; margin-bottom: 25px; border-radius: 50%; border: 3px solid var(--primary-color); }
         .intro-title, header h1, #welcomeMessage { font-family: 'Orbitron', sans-serif; text-transform: uppercase; background: linear-gradient(90deg, var(--primary-color), #ff00c1, #ffb300, var(--primary-color)); background-size: 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: aurora-flow 8s linear infinite; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
@@ -258,7 +264,7 @@
     <header>
         <h1 class="orbitron-font">A.I LONG BẢO 88</h1>
     </header>
-    <div class="main-content">
+    <div class="main-content" id="mainContent">
         <div id="settingsBtn">⚙️</div>
         <div id="aiChoiceContainer" class="hidden">
             <p id="welcomeMessage"></p>
@@ -274,7 +280,7 @@
                 <span>A.I Hoạt động: <span id="activeAI"></span></span>
             </div>
 
-            <button class="menu-btn orbitron-font" id="playWithAIBtn" onclick="if(typeof Tawk_API !== 'undefined' && Tawk_API.toggle){ Tawk_API.toggle(); } playSound('click'); return false;">
+            <button class="menu-btn orbitron-font" id="playWithAIBtn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-4H6V6h12v2z"/></svg>
                 <span class="menu-text">Chơi Cùng A.I</span>
             </button>
@@ -401,7 +407,7 @@ var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
 s1.async=true;
-s1.src='https://embed.tawk.to/66425b7ddbadee190ffc208d/1it1jaote';
+s1.src='https://embed.tawk.to/68425b7ddbadee190ffc208d/1it1jaote';
 s1.charset='UTF-8';
 s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
@@ -419,6 +425,7 @@ s0.parentNode.insertBefore(s1,s0);
     const gameData = [ { name: 'BA CON HEO NHỎ', image: 'https://i.ibb.co/Q3dYksdQ/BA-CON-HEO-NH.jpg' }, { name: 'BÃO KỊCH NGON NGỌT', image: 'https://i.ibb.co/h1XkFxcw/B-O-K-CH-NG-NG-T.jpg' }, { name: 'BÃO KIM TIỀN', image: 'https://i.ibb.co/KpXRkb4n/B-O-KIM-TI-N.jpg' }, { name: 'CUỒNG NỘ MÈO', image: 'https://i.ibb.co/jvnT8Qm1/CU-I-N-M.jpg' }, { name: 'THẦN TÀI GIÁ ĐÁO', image: 'https://i.ibb.co/jXvqdpd/default-4.jpg' }, { name: 'JOKER', image: 'https://i.ibb.co/21C53TfM/JOKER.jpg' }, { name: 'NỮ HOÀNG INCA', image: 'https://i.ibb.co/JRgCH2CC/N-HO-NG-INCA.jpg' }, { name: 'ALIBABA', image: 'https://i.ibb.co/6JJzg75v/ALIBABA.jpg' }, { name: 'BÓNG THÁCH ĐẤU 2', image: 'https://i.ibb.co/bjS6ztq7/B-O-TH-CH-2.jpg' }, { name: 'QUYỀN VƯƠNG', image: 'https://i.ibb.co/Y4Pky0NW/QUY-N-V-NG.jpg' }, { name: 'SIN CITY', image: 'https://i.ibb.co/FbLYFC28/SINCITY.jpg' }, { name: 'SUPER ACE', image: 'https://i.ibb.co/0z7rq0R/SUPER-ACE.jpg' }, { name: 'THÀNH PHỐ VÀNG', image: 'https://i.ibb.co/5XpkCZ9Z/TH-NH-PH-V-NG.jpg' }, { name: 'TRÂU HÚC', image: 'https://i.ibb.co/N5Dst5n/TR-U-H-C.jpg' }, { name: 'ĐƯỜNG MẠT CHƯỢC 2', image: 'https://i.ibb.co/9HzhpDSZ/NG-M-T-CH-C-2.jpg' }, { name: 'ĐƯỜNG MẠT CHƯỢT', image: 'https://i.ibb.co/CsvS9Jq7/NG-M-T-CH-T.jpg' }, { name: 'GANESHA VÀNG', image: 'https://i.ibb.co/tPKDFgXJ/GANESHA-V-NG.jpg' }, { name: 'KỲ LÂN MẠ VÀNG', image: 'https://i.ibb.co/S7srXvxc/K-L-N-M-CH-N-C.jpg' }, { name: 'KHO BÁU AZTEC', image: 'https://i.ibb.co/x8g4Yjb3/KHO-B-U-AZTEC.jpg' }, { name: 'MEDUSA 1: LỜI NGUYỀN ATHENA', image: 'https://i.ibb.co/DD4JSsQ1/MEDUSA-1-L-I-NGUY-N.jpg' }, { name: 'MEDUSA', image: 'https://i.ibb.co/cKvJ8hQf/MEDUSA.jpg' }, { name: 'NEKO MAY MẮN', image: 'https://i.ibb.co/RTjCsDvf/NEKO-MAY-M-N.jpg' }, { name: 'NỮ HOÀNG TIỀN THƯỞNG', image: 'https://i.ibb.co/fVxjh4rC/N-HO-NG-TI-N-TH-NG.jpg' }, { name: 'QUỶ TỬ CHIẾN TIỀN THƯỞNG', image: 'https://i.ibb.co/7Nx37ftx/QUY-T-CHI-N-TI-N-TH-NG.jpg' }, { name: 'THỎ MAY MẮN', image: 'https://i.ibb.co/RTXxqQP0/TH-MAY-M-N.jpg' }, { name: 'VUA KHỦNG LONG', image: 'https://i.ibb.co/gbTBKrjg/VUA-C-NG-LONG.jpg' }, { name: 'WILD OTTER', image: 'https://i.ibb.co/srLdPjG/WILD-O-T-C.jpg' }, { name: 'ZOMBIE BREAKER', image: 'https://i.ibb.co/wFnHkL3N/ZOMBIE-BREAKER.jpg' }, { name: 'LỄ HỘI BIA', image: 'https://i.ibb.co/8gwq7PmY/U-B-P-B-N.jpg' }, { name: 'KHU TIỀN MẶT 777', image: 'https://i.ibb.co/SD2Rgf31/KHU-TI-N-M-T-777.jpg' }, { name: 'NOEL BIG BANG', image: 'https://i.ibb.co/Z69fZ2qZ/NOEL-BIG-BANG.jpg' }, { name: 'NGÀY TẬN THẾ', image: 'https://i.ibb.co/Rk2tR28N/NG-Y-T-N-TH.jpg' }, { name: 'NHIỆM VỤ BERMUDA', image: 'https://i.ibb.co/DHG22BF5/NHI-M-V-BERMUDA.jpg' }, { name: 'RACING BULL', image: 'https://i.ibb.co/gbFw5MsH/RACING-BULL.jpg' }, { name: 'RISE OF SAMURAI 4', image: 'https://i.ibb.co/bg6TG5vp/RISE-OF-SAMURAI-4.jpg' }, { name: 'SUGAR RUSH 1000', image: 'https://i.ibb.co/ZjGNbk8/SUGAR-RUSH-1000.jpg' }, { name: 'TIK TAC TAKE', image: 'https://i.ibb.co/fYf5ZfD7/TIK-TAC-TAK.jpg' }, { name: 'VẬN MAY GIZA', image: 'https://i.ibb.co/qYyTgdMS/V-N-MAY-GIZA.jpg' } ];
     
     const DOM = {
+        mainContent: document.getElementById('mainContent'),
         cinematicIntro: document.getElementById('cinematicIntroOverlay'), loginScreen: document.getElementById('loginScreen'), appScreen: document.getElementById('appScreen'), aiChoiceContainer: document.getElementById('aiChoiceContainer'), menuContainer: document.getElementById('menuContainer'), scanningContainer: document.getElementById('scanningContainer'), resultContainer: document.getElementById('resultContainer'), gameSelectionContainer: document.getElementById('gameSelectionContainer'),
         videos: { login: document.getElementById('video-login'), aiChoice: document.getElementById('video-ai-choice'), menu: document.getElementById('video-menu') },
         modals: { code: document.getElementById('codeEntryModal'), security: document.getElementById('securityCheckModal'), capital: document.getElementById('capitalWarningModal'), inactivity: document.getElementById('inactivityWarningModal'), history: document.getElementById('historyModal'), settings: document.getElementById('settingsModal') },
@@ -441,8 +448,6 @@ s0.parentNode.insertBefore(s1,s0);
         playSound('click');
         const usernameInput = document.getElementById("username"), codeInput = document.getElementById("loginCode"), errorEl = document.getElementById("error");
         const username = usernameInput.value.trim(), code = codeInput.value.trim();
-        if (!username) { errorEl.textContent = "Vui lòng nhập Tên tài khoản!"; return; }
-        if (!code) { errorEl.textContent = "Vui lòng nhập Mã truy cập!"; return; }
         if (validLoginCodes.includes(code)) {
             playSound('success');
             loggedInUsername = username;
@@ -459,24 +464,25 @@ s0.parentNode.insertBefore(s1,s0);
         
         const jarHuntBtn = document.getElementById('jarHuntBtn');
         const playWithAIBtn = document.getElementById('playWithAIBtn');
-        const menuContainer = document.getElementById('menuContainer');
-
+        
         if (type === 'gen4') {
             // Apply VIP styles and show VIP buttons
-            menuContainer.classList.add('menu-vip');
-            menuContainer.classList.remove('menu-base');
+            DOM.menuContainer.classList.add('menu-vip');
+            DOM.menuContainer.classList.remove('menu-base');
+            DOM.mainContent.classList.add('vip-mode');
             jarHuntBtn.style.display = 'flex';
             playWithAIBtn.style.display = 'flex';
         } else { 
             // Apply Base styles and hide VIP buttons
-            menuContainer.classList.add('menu-base');
-            menuContainer.classList.remove('menu-vip');
+            DOM.menuContainer.classList.add('menu-base');
+            DOM.menuContainer.classList.remove('menu-vip');
+            DOM.mainContent.classList.remove('vip-mode');
             jarHuntBtn.style.display = 'none';
             playWithAIBtn.style.display = 'none';
         }
 
         switchView(DOM.menuContainer, [DOM.aiChoiceContainer]);
-        updateVideoBackground('menu');
+        updateVideoBackground('menu'); 
         startDashboard();
     }
     
@@ -715,6 +721,15 @@ s0.parentNode.insertBefore(s1,s0);
         document.getElementById('closeSecurityModalBtn').addEventListener('click', () => { hideModal(DOM.modals.security); stopSound('scan'); });
         document.getElementById('closeWarningModalBtn').addEventListener('click', () => hideModal(DOM.modals.capital));
         document.getElementById('closeHistoryModalBtn').addEventListener('click', () => hideModal(DOM.modals.history));
+        
+        // ROBUST TAWK.TO CLICK HANDLER
+        document.getElementById('playWithAIBtn').addEventListener('click', function() {
+            playSound('click');
+            if (typeof Tawk_API !== 'undefined' && typeof Tawk_API.toggle === 'function') {
+                Tawk_API.toggle();
+            }
+        });
+
         Object.values(DOM.modals).forEach(modal => { if(modal.id !== 'inactivityWarningModal') { modal.addEventListener('click', (e) => { if (e.target === modal) { hideModal(modal); stopSound('scan'); } }); } });
         ['mousemove', 'mousedown', 'touchstart', 'keypress'].forEach(evt => document.addEventListener(evt, resetInactivityTimer, false));
     });
