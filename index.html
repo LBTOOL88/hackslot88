@@ -344,17 +344,6 @@
     </div>
 </div>
 
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/68425b7ddbadee190ffc208d/1it1jaote';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
 <script>
     const COIN_STORAGE_KEY = 'longBaoUserCoins_v1';
     
@@ -386,6 +375,7 @@ s0.parentNode.insertBefore(s1,s0);
         jarHunt: 10, playWithAI: 20
     };
     
+    let tawkToLoaded = false;
     let currentUserCoins = 0;
     let initialUserCoins = 0;
     let loggedInCode = null;
@@ -407,6 +397,32 @@ s0.parentNode.insertBefore(s1,s0);
     };
     
     let inactivityTimer, introHasEnded = false;
+
+    // --- Function to load and open Tawk.to chat ---
+    function loadAndOpenTawkTo() {
+        // If the widget is already loaded, just open it.
+        if (tawkToLoaded && typeof Tawk_API !== 'undefined' && Tawk_API.maximize) {
+            Tawk_API.maximize();
+            return;
+        }
+        // If script is not loaded yet, load it.
+        if (!tawkToLoaded) {
+            tawkToLoaded = true; // Set the flag to prevent re-injection
+            // Define API object and onLoad behavior *before* injecting the script
+            window.Tawk_API = window.Tawk_API || {};
+            window.Tawk_API.onLoad = function() {
+                // Once loaded, maximize it.
+                window.Tawk_API.maximize();
+            };
+            var s1 = document.createElement("script");
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/68425b7ddbadee190ffc208d/1it1jaote';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            document.head.appendChild(s1);
+        }
+    }
+
 
     function playSound(soundName) { if (isSoundEnabled) { try { if (DOM.sounds[soundName]) { DOM.sounds[soundName].currentTime = 0; DOM.sounds[soundName].play(); } } catch(e) { /* ignore */ } } }
     function stopSound(soundName) { try { if (DOM.sounds[soundName]) { DOM.sounds[soundName].pause(); DOM.sounds[soundName].currentTime = 0; } } catch(e) { /* ignore */ } }
@@ -470,7 +486,6 @@ s0.parentNode.insertBefore(s1,s0);
             document.getElementById('welcomeMessage').textContent = `XIN CHÀO, ${loggedInUsername.toUpperCase()}`;
             errorEl.textContent = "";
 
-            // Change: Instead of selecting AI directly, show the choice screen
             setScreenVisibility(DOM.appScreen, [DOM.loginScreen]);
             setScreenVisibility(DOM.aiChoiceContainer, [DOM.menuContainer, DOM.scanningContainer, DOM.resultContainer]);
             updateVideoBackground('aiChoice');
@@ -752,11 +767,9 @@ s0.parentNode.insertBefore(s1,s0);
         document.getElementById('startAnalysisBtn').addEventListener('click', () => useFeature('startAnalysis', showGameSelection));
         document.getElementById('jarHuntBtn').addEventListener('click', () => useFeature('jarHunt', startJarHunt));
         document.getElementById('securityCheckBtn').addEventListener('click', () => useFeature('securityCheck', runSecurityCheck));
-        document.getElementById('playWithAIBtn').addEventListener('click', () => useFeature('playWithAI', () => {
-            if (typeof Tawk_API !== 'undefined' && typeof Tawk_API.toggle === 'function') {
-                Tawk_API.toggle();
-            }
-        }));
+        
+        // Updated "Play with A.I" button functionality to load the script on demand
+        document.getElementById('playWithAIBtn').addEventListener('click', () => useFeature('playWithAI', loadAndOpenTawkTo));
 
         document.getElementById('historyBtn').addEventListener('click', () => { playSound('click'); displayScanHistory(); });
         document.getElementById('capitalPreserveBtn').addEventListener('click', () => { playSound('click'); showModal(DOM.modals.capital); });
